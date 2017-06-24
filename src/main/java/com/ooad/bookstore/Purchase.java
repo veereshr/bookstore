@@ -2,10 +2,13 @@ package com.ooad.bookstore;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.JTabbedPane;
 import javax.swing.border.EmptyBorder;
+
+import com.ooad.bookstore.model.BookDetails;
+import com.ooad.bookstore.util.DBUtilitiesDAOImpl;
 import com.ooad.bookstore.util.UtilitiesDAOImpl;
 import javax.swing.JLabel;
+import net.proteanit.sql.DbUtils;
 import java.awt.Font;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
@@ -15,26 +18,31 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.awt.BorderLayout;
 import java.awt.Color;
 import javax.swing.JTable;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.Timer;
 import javax.swing.JScrollPane;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.JScrollBar;
+import javax.swing.table.TableColumn;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.GroupLayout;
+import javax.swing.GroupLayout.Alignment;
 
 public class Purchase extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel jContentPane;
-	private JTable jTable;
 	JLabel jLabelDateTime;
 	JLabel jLabelDate;
 	private static final String CART_ICON = "src/main/resources/cart.jpg";
+	private JTable jTable;
 
 	public Purchase(String userName) {
 
@@ -44,75 +52,25 @@ public class Purchase extends JFrame {
 		jContentPane.setBackground(Color.WHITE);
 		jContentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(jContentPane);
-		jContentPane.setLayout(null);
 
 		JLabel jLabelWelcomeNote = new JLabel("Welcome to Book Store");
-		jLabelWelcomeNote.setBounds(32, 55, 205, 19);
 		jLabelWelcomeNote.setFont(new Font("Calibri", Font.BOLD | Font.ITALIC, 20));
-		jContentPane.add(jLabelWelcomeNote);
-
-		JTabbedPane jJabbedPane = new JTabbedPane(JTabbedPane.TOP);
-		jJabbedPane.setBackground(Color.WHITE);
-		jJabbedPane.setBounds(30, 85, 746, 465);
-		jContentPane.add(jJabbedPane);
-
-		JPanel jPanel = new JPanel();
-		jPanel.setBackground(Color.WHITE);
-		jJabbedPane.addTab("Shop Items", null, jPanel, null);
-		jPanel.setLayout(null);
-
-		JScrollPane jScrollPane = new JScrollPane();
-		jScrollPane.setBounds(0, 0, 719, 415);
-		jScrollPane.setBackground(Color.WHITE);
-		jPanel.add(jScrollPane);
-
-		jTable = new JTable();
-		jTable.setBackground(Color.WHITE);
-		jTable.setModel(new DefaultTableModel(
-				new Object[][] { { null, null, null, null, null, null, null },
-						{ null, null, null, null, null, null, null }, { null, null, null, null, null, null, null },
-						{ null, null, null, null, null, null, null }, { null, null, null, null, null, null, null },
-						{ null, null, null, null, null, null, null }, { null, null, null, null, null, null, null }, },
-				new String[] { "Icon", "Book", "Description", "Availability", "Price", "Select", "Quantity" }));
-		jScrollPane.setViewportView(jTable);
-
-		JScrollBar jScrollBarVertical = new JScrollBar();
-		jScrollBarVertical.setBounds(720, 0, 21, 415);
-		jPanel.add(jScrollBarVertical);
-
-		JScrollBar jScrollBarHorizontal = new JScrollBar();
-		jScrollBarHorizontal.setBackground(Color.WHITE);
-		jScrollBarHorizontal.setOrientation(JScrollBar.HORIZONTAL);
-		jScrollBarHorizontal.setBounds(0, 414, 725, 23);
-		jPanel.add(jScrollBarHorizontal);
-
-		JPanel jPanel2 = new JPanel();
-		jPanel2.setBackground(Color.WHITE);
-		jJabbedPane.addTab("Review Order", null, jPanel2, null);
 
 		JLabel jLabelTime = new JLabel("Time");
 		jLabelTime.setFont(new Font("Calibri", Font.BOLD, 20));
-		jLabelTime.setBounds(753, 24, 46, 19);
-		jContentPane.add(jLabelTime);
 
 		jLabelDateTime = new JLabel();
 		jLabelDateTime.setForeground(Color.MAGENTA);
 		jLabelDateTime.setBackground(Color.WHITE);
 		jLabelDateTime.setFont(new Font("Calibri", Font.BOLD, 20));
-		jLabelDateTime.setBounds(801, 24, 117, 19);
-		jContentPane.add(jLabelDateTime);
 
 		JLabel lblDate = new JLabel("Date");
 		lblDate.setFont(new Font("Calibri", Font.BOLD, 20));
-		lblDate.setBounds(753, 55, 46, 19);
-		jContentPane.add(lblDate);
 
 		jLabelDate = new JLabel();
 		jLabelDate.setForeground(Color.MAGENTA);
 		jLabelDate.setFont(new Font("Calibri", Font.BOLD, 18));
 		jLabelDate.setBackground(Color.WHITE);
-		jLabelDate.setBounds(801, 55, 151, 19);
-		jContentPane.add(jLabelDate);
 
 		JButton jButtonAddToCart = new JButton();
 		Image img;
@@ -124,26 +82,91 @@ public class Purchase extends JFrame {
 			e.printStackTrace();
 		}
 		jButtonAddToCart.setFont(new Font("Calibri", Font.BOLD, 20));
-		jButtonAddToCart.setBounds(796, 209, 66, 62);
-		jContentPane.add(jButtonAddToCart);
 
 		JButton jButtonModifyAccount = new JButton("Modify Account");
 		jButtonModifyAccount.setFont(new Font("Calibri", Font.BOLD, 18));
-		jButtonModifyAccount.setBounds(801, 294, 159, 38);
-		jContentPane.add(jButtonModifyAccount);
 
 		JLabel jLabelAddToCart = new JLabel("Add to Cart");
 		jLabelAddToCart.setFont(new Font("Calibri", Font.BOLD, 18));
-		jLabelAddToCart.setBounds(872, 232, 91, 19);
-		jContentPane.add(jLabelAddToCart);
-		
+
 		JLabel jLabel = new JLabel("Book Store");
 		jLabel.setForeground(Color.ORANGE);
 		jLabel.setFont(new Font("Century Schoolbook", Font.BOLD | Font.ITALIC, 36));
-		jLabel.setBounds(322, 9, 225, 31);
-		jContentPane.add(jLabel);
+
+		JScrollPane jScrollPane = new JScrollPane();
+		jScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
+		jScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		add(jScrollPane, BorderLayout.CENTER);
+		GroupLayout groupLayoutJContentPane = new GroupLayout(jContentPane);
+		groupLayoutJContentPane.setHorizontalGroup(groupLayoutJContentPane.createParallelGroup(Alignment.LEADING)
+				.addGroup(groupLayoutJContentPane.createSequentialGroup().addGroup(groupLayoutJContentPane
+						.createParallelGroup(Alignment.LEADING)
+						.addGroup(groupLayoutJContentPane.createSequentialGroup().addGap(317)
+								.addComponent(jLabel, GroupLayout.PREFERRED_SIZE, 225, GroupLayout.PREFERRED_SIZE)
+								.addGap(206)
+								.addComponent(jLabelTime, GroupLayout.PREFERRED_SIZE, 46, GroupLayout.PREFERRED_SIZE)
+								.addGap(2).addComponent(jLabelDateTime, GroupLayout.PREFERRED_SIZE, 117,
+										GroupLayout.PREFERRED_SIZE))
+						.addGroup(groupLayoutJContentPane.createSequentialGroup().addGap(796).addComponent(
+								jButtonModifyAccount, GroupLayout.PREFERRED_SIZE, 159, GroupLayout.PREFERRED_SIZE))
+						.addGroup(groupLayoutJContentPane.createSequentialGroup().addGap(27)
+								.addGroup(groupLayoutJContentPane.createParallelGroup(Alignment.LEADING)
+										.addGroup(groupLayoutJContentPane.createSequentialGroup()
+												.addComponent(jScrollPane, GroupLayout.PREFERRED_SIZE, 738,
+														GroupLayout.PREFERRED_SIZE)
+												.addGap(26)
+												.addComponent(jButtonAddToCart, GroupLayout.PREFERRED_SIZE, 66,
+														GroupLayout.PREFERRED_SIZE)
+												.addGap(10).addComponent(jLabelAddToCart, GroupLayout.PREFERRED_SIZE,
+														91, GroupLayout.PREFERRED_SIZE))
+										.addGroup(groupLayoutJContentPane.createSequentialGroup()
+												.addComponent(jLabelWelcomeNote, GroupLayout.PREFERRED_SIZE, 205,
+														GroupLayout.PREFERRED_SIZE)
+												.addGap(516)
+												.addComponent(lblDate, GroupLayout.PREFERRED_SIZE, 46,
+														GroupLayout.PREFERRED_SIZE)
+												.addGap(2).addComponent(jLabelDate, GroupLayout.PREFERRED_SIZE, 151,
+														GroupLayout.PREFERRED_SIZE)))))
+						.addContainerGap(16, Short.MAX_VALUE)));
+		groupLayoutJContentPane.setVerticalGroup(groupLayoutJContentPane.createParallelGroup(Alignment.LEADING)
+				.addGroup(groupLayoutJContentPane.createSequentialGroup().addGap(4)
+						.addGroup(groupLayoutJContentPane.createParallelGroup(Alignment.LEADING)
+								.addComponent(jLabel, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE)
+								.addGroup(groupLayoutJContentPane.createSequentialGroup().addGap(15).addComponent(
+										jLabelTime, GroupLayout.PREFERRED_SIZE, 19, GroupLayout.PREFERRED_SIZE))
+								.addGroup(groupLayoutJContentPane.createSequentialGroup().addGap(15).addComponent(
+										jLabelDateTime, GroupLayout.PREFERRED_SIZE, 19, GroupLayout.PREFERRED_SIZE)))
+						.addGap(12)
+						.addGroup(groupLayoutJContentPane.createParallelGroup(Alignment.LEADING)
+								.addComponent(jLabelWelcomeNote, GroupLayout.PREFERRED_SIZE, 19,
+										GroupLayout.PREFERRED_SIZE)
+								.addComponent(lblDate, GroupLayout.PREFERRED_SIZE, 19, GroupLayout.PREFERRED_SIZE)
+								.addComponent(jLabelDate, GroupLayout.PREFERRED_SIZE, 19, GroupLayout.PREFERRED_SIZE))
+						.addGroup(groupLayoutJContentPane.createParallelGroup(Alignment.LEADING)
+								.addGroup(groupLayoutJContentPane.createSequentialGroup().addGap(137)
+										.addGroup(groupLayoutJContentPane.createParallelGroup(Alignment.LEADING)
+												.addComponent(jButtonAddToCart, GroupLayout.PREFERRED_SIZE, 62,
+														GroupLayout.PREFERRED_SIZE)
+												.addGroup(groupLayoutJContentPane.createSequentialGroup().addGap(23)
+														.addComponent(jLabelAddToCart, GroupLayout.PREFERRED_SIZE, 19,
+																GroupLayout.PREFERRED_SIZE)))
+										.addGap(23).addComponent(jButtonModifyAccount, GroupLayout.PREFERRED_SIZE, 38,
+												GroupLayout.PREFERRED_SIZE))
+								.addGroup(groupLayoutJContentPane.createSequentialGroup().addGap(25).addComponent(
+										jScrollPane, GroupLayout.PREFERRED_SIZE, 434, GroupLayout.PREFERRED_SIZE)))));
+
+		jTable = new JTable();
+		jTable.setModel(new DefaultTableModel(
+				new Object[][] { { null, null, null, null, null, null, null },
+						{ null, null, null, null, null, null, null }, { null, null, null, null, null, null, null },
+						{ null, null, null, null, null, null, null }, { null, null, null, null, null, null, null },
+						{ null, null, null, null, null, null, null }, { null, null, null, null, null, null, null }, },
+				new String[] { "Icon", "Book", "Type", "Availability", "Price", "Select", "Quantity" }));
+		jScrollPane.setViewportView(jTable);
+		jContentPane.setLayout(groupLayoutJContentPane);
 
 		setDate();
+		displayTable();
 
 		JLabel jLabelGreetingName;
 		try {
@@ -179,5 +202,29 @@ public class Purchase extends JFrame {
 
 		};
 		new Timer(1000, actionListener).start();
+	}
+
+	public void displayTable() {
+		ArrayList<BookDetails> arrayList = new ArrayList<BookDetails>();
+		arrayList = getDBUtilitiesDAOImplHelper().getBookDetails();
+		String[] columns = { "Icon", "Book", "Type", "Availability", "Price", "Select", "Quantity" };
+		Object[][] rows = new Object[arrayList.size()][7];
+
+		for (int i = 0; i < arrayList.size(); i++) {
+			rows[i][1] = arrayList.get(i).getBook();
+			rows[i][2] = arrayList.get(i).getType();
+			rows[i][3] = arrayList.get(i).getAvailability();
+			rows[i][4] = arrayList.get(i).getPrice();
+
+		}
+		UtilitiesDAOImpl utilitiesDAOImpl = new UtilitiesDAOImpl(rows, columns);
+		jTable.setModel(utilitiesDAOImpl);
+		jTable.setRowHeight(100);
+		jTable.getColumnModel().getColumn(2).setPreferredWidth(150);
+
+	}
+
+	private DBUtilitiesDAOImpl getDBUtilitiesDAOImplHelper() {
+		return DBUtilitiesDAOImpl.getInstance();
 	}
 }
