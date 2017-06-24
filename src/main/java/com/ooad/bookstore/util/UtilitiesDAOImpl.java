@@ -5,9 +5,14 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class UtilitiesDAOImpl {
+import javax.swing.table.AbstractTableModel;
+
+@SuppressWarnings("serial")
+public class UtilitiesDAOImpl extends AbstractTableModel {
 
 	private static UtilitiesDAOImpl utilitiesDAOImpl = null;
+	private String[] columns;
+	private Object[][] rows;
 
 	public static UtilitiesDAOImpl getInstance() throws FileNotFoundException, SQLException {
 		if (utilitiesDAOImpl == null) {
@@ -17,6 +22,12 @@ public class UtilitiesDAOImpl {
 	}
 
 	private UtilitiesDAOImpl() {
+
+	}
+
+	public UtilitiesDAOImpl(Object[][] data, String[] columnName) {
+		this.columns = columnName;
+		this.rows = data;
 
 	}
 
@@ -31,10 +42,8 @@ public class UtilitiesDAOImpl {
 				return resultSet.getString("customerPassword");
 			}
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return null;
@@ -50,12 +59,27 @@ public class UtilitiesDAOImpl {
 				return resultSet.getString("customerFirstName");
 			}
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	public int getColumnCount() {
+		return this.columns.length;
+	}
+
+	public int getRowCount() {
+		return this.rows.length;
+	}
+
+	public Object getValueAt(int rowIndex, int columnIndex) {
+		return this.rows[rowIndex][columnIndex];
+	}
+	
+	public String getColumnName(int column)
+	{
+		return this.columns[column];
 	}
 }
