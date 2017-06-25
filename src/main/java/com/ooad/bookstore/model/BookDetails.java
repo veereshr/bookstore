@@ -1,5 +1,11 @@
 package com.ooad.bookstore.model;
 
+/***
+ * 
+ * @author VikneshKumar
+ *
+ */
+
 public class BookDetails {
 
 	private String book;

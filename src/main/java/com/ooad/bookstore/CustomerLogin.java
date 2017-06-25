@@ -17,6 +17,12 @@ import java.sql.SQLException;
 import java.text.ParseException;
 import java.awt.event.ActionEvent;
 
+/***
+ * 
+ * @author VikneshKumar
+ *
+ */
+
 @SuppressWarnings("serial")
 public class CustomerLogin extends JFrame {
 

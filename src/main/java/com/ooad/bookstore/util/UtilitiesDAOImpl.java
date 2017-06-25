@@ -1,5 +1,11 @@
 package com.ooad.bookstore.util;
 
+/***
+ * 
+ * @author VikneshKumar
+ *
+ */
+
 import java.io.FileNotFoundException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -35,7 +41,7 @@ public class UtilitiesDAOImpl extends AbstractTableModel {
 
 		PreparedStatement preparedStatement;
 		try {
-			preparedStatement = DBConnection.getConnection("bookstore").prepareStatement(
+			preparedStatement = DBConnection.getConnection(DBUtilitiesDAOImpl.DATABASE_NAME).prepareStatement(
 					"Select customerPassword from customerAccount where customerID =" + "'" + customerID + "'");
 			ResultSet resultSet = preparedStatement.executeQuery();
 			if (resultSet.next()) {

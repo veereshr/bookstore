@@ -1,5 +1,11 @@
 package com.ooad.bookstore.util;
 
+/***
+ * 
+ * @author VikneshKumar
+ *
+ */
+
 import java.io.FileNotFoundException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -16,7 +22,7 @@ public class DBUtilitiesDAOImpl {
 	public static final int SQL_INTEGRITY_CONSTRAIN_VIOLATION_EXCEPTION = 2;
 	public static final int SQL_EXCEPTION = 3;
 	private static DBUtilitiesDAOImpl dbUtilitiesDAOImpl = null;
-	private static final String DATABASE_NAME = "bookstore";
+	public static final String DATABASE_NAME = "bookstore";
 
 	public static DBUtilitiesDAOImpl getInstance() {
 		if (dbUtilitiesDAOImpl == null) {

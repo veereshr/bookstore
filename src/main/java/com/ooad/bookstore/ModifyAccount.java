@@ -1,5 +1,11 @@
 package com.ooad.bookstore;
 
+/***
+ * 
+ * @author VikneshKumar
+ *
+ */
+
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
@@ -7,31 +13,28 @@ import javax.swing.border.EmptyBorder;
 
 import com.ooad.bookstore.model.Customer;
 import com.ooad.bookstore.util.DBUtilitiesDAOImpl;
+
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+
 import java.awt.Font;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.JRadioButton;
 import java.awt.Color;
+
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.io.FileNotFoundException;
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.awt.event.ActionEvent;
-import java.text.ParseException;
-
-/***
- * 
- * @author VikneshKumar
- *
- */
 
 @SuppressWarnings("serial")
-public class SignUp extends JFrame {
+public class ModifyAccount extends JFrame {
 
 	private JPanel contentPane;
 	private JTextField jTextFieldFirstName;
@@ -65,9 +68,8 @@ public class SignUp extends JFrame {
 	private static final int CVV_LENGTH = 3;
 	private static final int MOBILE_NUMBER_LENGTH = 10;
 	private static final int CARD_NUMBER_LENGTH = 16;
-	
 
-	public SignUp() throws ParseException {
+	public ModifyAccount() throws ParseException {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(150, 150, 1000, 600);
 		contentPane = new JPanel();
@@ -504,7 +506,7 @@ public class SignUp extends JFrame {
 		jLabelTip1.setFont(new Font("Calibri", Font.ITALIC, 20));
 		jLabelTip1.setBounds(456, 368, 312, 24);
 		contentPane.add(jLabelTip1);
-		
+
 		JLabel jLabelTip2 = new JLabel("Fields marked with * are mandatory fields");
 		jLabelTip2.setForeground(Color.MAGENTA);
 		jLabelTip2.setFont(new Font("Calibri", Font.ITALIC, 20));

@@ -1,14 +1,18 @@
 package com.ooad.bookstore;
 
+/***
+ * 
+ * @author VikneshKumar
+ *
+ */
+
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-
 import com.ooad.bookstore.model.BookDetails;
 import com.ooad.bookstore.util.DBUtilitiesDAOImpl;
 import com.ooad.bookstore.util.UtilitiesDAOImpl;
 import javax.swing.JLabel;
-import net.proteanit.sql.DbUtils;
 import java.awt.Font;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
@@ -28,7 +32,6 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.Timer;
 import javax.swing.JScrollPane;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumn;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -84,6 +87,11 @@ public class Purchase extends JFrame {
 		jButtonAddToCart.setFont(new Font("Calibri", Font.BOLD, 20));
 
 		JButton jButtonModifyAccount = new JButton("Modify Account");
+		jButtonModifyAccount.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				
+			}
+		});
 		jButtonModifyAccount.setFont(new Font("Calibri", Font.BOLD, 18));
 
 		JLabel jLabelAddToCart = new JLabel("Add to Cart");
@@ -96,7 +104,7 @@ public class Purchase extends JFrame {
 		JScrollPane jScrollPane = new JScrollPane();
 		jScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
 		jScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-		add(jScrollPane, BorderLayout.CENTER);
+		getContentPane().add(jScrollPane, BorderLayout.CENTER);
 		GroupLayout groupLayoutJContentPane = new GroupLayout(jContentPane);
 		groupLayoutJContentPane.setHorizontalGroup(groupLayoutJContentPane.createParallelGroup(Alignment.LEADING)
 				.addGroup(groupLayoutJContentPane.createSequentialGroup().addGroup(groupLayoutJContentPane
