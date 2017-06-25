@@ -1,10 +1,5 @@
 package com.ooad.bookstore.util;
 
-/***
- * 
- * @author VikneshKumar
- *
- */
 
 import java.io.FileNotFoundException;
 import java.sql.PreparedStatement;
@@ -55,6 +50,25 @@ public class UtilitiesDAOImpl extends AbstractTableModel {
 		return null;
 	}
 
+	
+	public boolean validateEmployeeCredentials(String id, String password) {
+
+		PreparedStatement preparedStatement;
+		try {
+			preparedStatement = DBConnection.getConnection(DBUtilitiesDAOImpl.DATABASE_NAME).prepareStatement(
+					"Select accpass from employee where id =" + "'" + id + "'");
+			ResultSet resultSet = preparedStatement.executeQuery();
+			if (resultSet.next()) {
+				return resultSet.getString("accpass").equals(password);
+			}
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
 	public String getCustomerFirstName(String customerID) {
 		PreparedStatement preparedStatement;
 		try {

@@ -27,5 +27,20 @@ bookPrice varchar(10) not null,
 unique (bookID),
 primary key (bookID));
 
+create table if not exists employee (id varchar(10) not null, 
+first_name varchar(20) not null, 
+last_name varchar(20) not null, 
+accpass varchar(20) not null,
+address1 varchar(50) not null,
+address2 varchar(50),
+state varchar(10) not null,
+city varchar(10) not null,
+zipcode int(5) not null,
+mobile varchar(20) not null,
+unique (id),
+primary key (id));
+
+insert into employee(id, first_name, last_name, accpass, address1, address2, state, city, zipcode, mobile) values ('admin', 'Tom', 'Potter', 'admin', '10 E Ontario Place', 'Apt #202', 'IL', 'Chicago', 60616, 3129182915);
+
 insert into bookdetails (bookID, bookIcon, bookName, bookType, bookAvailability, bookPrice) 
 values (0001, null, 'Harry Potter', 'Sci-Fi', 10, '$100');

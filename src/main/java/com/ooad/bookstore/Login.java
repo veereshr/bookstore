@@ -95,8 +95,19 @@ public class Login {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		
+		jButtonEmployeeLogin.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent actionEvent) {
+				EmployeeLogin employeeLogin = new EmployeeLogin();
+				employeeLogin.setVisible(true);
+
+			}
+		});
+		
+		
 		jButtonEmployeeLogin.setBounds(605, 128, 225, 232);
 		frame.getContentPane().add(jButtonEmployeeLogin);
+		
 		
 		JLabel jLabelCustomerLogin = new JLabel("Customer Login");
 		jLabelCustomerLogin.setFont(new Font("Calibri", Font.BOLD, 34));
