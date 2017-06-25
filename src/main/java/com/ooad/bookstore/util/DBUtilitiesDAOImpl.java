@@ -35,12 +35,12 @@ public class DBUtilitiesDAOImpl {
 
 	}
 
-	public int updateCustomerDetails() throws SQLException, FileNotFoundException {
+	public int insertCustomerDetails() throws SQLException, FileNotFoundException {
 
-		String CustomerRegistration = "INSERT INTO customerAccount VALUES " + "(?,?,?,?,?,?,?,?,?,?,?,?,?);";
+		String customerRegistration = "INSERT INTO customerAccount VALUES " + "(?,?,?,?,?,?,?,?,?,?,?,?,?);";
 		try {
 			PreparedStatement preparedStatement = DBConnection.getConnection(DATABASE_NAME)
-					.prepareStatement(CustomerRegistration);
+					.prepareStatement(customerRegistration);
 			preparedStatement.setString(1, getCustomerHelper().getUserID());
 			preparedStatement.setString(2, getCustomerHelper().getCustomerFirstName());
 			preparedStatement.setString(3, getCustomerHelper().getCustomerLastName());
@@ -48,10 +48,10 @@ public class DBUtilitiesDAOImpl {
 			preparedStatement.setString(5, getCustomerHelper().getCustomerAddress1());
 			preparedStatement.setString(6, getCustomerHelper().getCustomerAddress2());
 			preparedStatement.setString(7, getCustomerHelper().getCustomerState());
-			preparedStatement.setInt(8, getCustomerHelper().getCustomerZipCode());
+			preparedStatement.setString(8, getCustomerHelper().getCustomerZipCode());
 			preparedStatement.setString(9, getCustomerHelper().getMobileNumber());
 			preparedStatement.setString(10, getCustomerHelper().getNameonCard());
-			preparedStatement.setInt(11, getCustomerHelper().getCvv());
+			preparedStatement.setString(11, getCustomerHelper().getCvv());
 			preparedStatement.setString(12, getCustomerHelper().getCardNumber());
 			preparedStatement.setString(13, getCustomerHelper().getExpiry());
 
@@ -70,10 +70,10 @@ public class DBUtilitiesDAOImpl {
 	public ArrayList<BookDetails> getBookDetails() {
 
 		String getBookDetails = "SELECT bookName, bookType, bookAvailability, bookPrice FROM bookDetails";
-		PreparedStatement pst;
+		PreparedStatement prepareStatement;
 		try {
-			pst = DBConnection.getConnection(DATABASE_NAME).prepareStatement(getBookDetails);
-			ResultSet resultSet = pst.executeQuery();
+			prepareStatement = DBConnection.getConnection(DATABASE_NAME).prepareStatement(getBookDetails);
+			ResultSet resultSet = prepareStatement.executeQuery();
 			ArrayList<BookDetails> arrayList = new ArrayList<BookDetails>();
 			while (resultSet.next()) {
 				BookDetails bookDetails = new BookDetails();
@@ -97,5 +97,7 @@ public class DBUtilitiesDAOImpl {
 	private Customer getCustomerHelper() {
 		return Customer.getInstance();
 	}
+	
+	
 
 }

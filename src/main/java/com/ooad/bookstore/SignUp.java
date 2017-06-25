@@ -378,7 +378,7 @@ public class SignUp extends JFrame {
 
 					// Checkpoint for Address Line 2
 					if (!(jTextFieldAddressLine2.getText().equals(""))) {
-						getCustomerHelper().setCustomerAddress1(jTextFieldAddressLine2.getText());
+						getCustomerHelper().setCustomerAddress2(jTextFieldAddressLine2.getText());
 					} else if (jTextFieldAddressLine2.getText().length() > MAX_LETTERS_IN_ADDRESS) {
 						alert[count] = "Address cannot exceed more than 50 Characters" + "\n";
 						count++;
@@ -389,7 +389,7 @@ public class SignUp extends JFrame {
 						alert[count] = "Enter a valid Zipcode" + "\n";
 						count++;
 					} else {
-						getCustomerHelper().setCustomerZipCode(Integer.parseInt(jTextFieldZipCode.getText()));
+						getCustomerHelper().setCustomerZipCode(jTextFieldZipCode.getText());
 					}
 
 					// Checkpoint for State
@@ -430,7 +430,7 @@ public class SignUp extends JFrame {
 						alert[count] = "Enter a valid CVV number" + "\n";
 						count++;
 					} else {
-						getCustomerHelper().setCvv(Integer.parseInt(jTextFieldCvv.getText()));
+						getCustomerHelper().setCvv(jTextFieldCvv.getText());
 					}
 
 					// Checkpoint for Card Number
@@ -466,7 +466,7 @@ public class SignUp extends JFrame {
 
 				if (count == 0) {
 					try {
-						getCustomerHelper().setResponse(getDBUtilitiesDAOImplHelper().updateCustomerDetails());
+						getCustomerHelper().setResponse(getDBUtilitiesDAOImplHelper().insertCustomerDetails());
 					} catch (FileNotFoundException e1) {
 						e1.printStackTrace();
 					} catch (SQLException e1) {

@@ -21,6 +21,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -46,6 +47,7 @@ public class Purchase extends JFrame {
 	JLabel jLabelDate;
 	private static final String CART_ICON = "src/main/resources/cart.jpg";
 	private JTable jTable;
+	JLabel jLabelGreetingName;
 
 	public Purchase(String userName) {
 
@@ -86,10 +88,31 @@ public class Purchase extends JFrame {
 		}
 		jButtonAddToCart.setFont(new Font("Calibri", Font.BOLD, 20));
 
+		
+		try {
+			if (userName != null) {
+				jLabelGreetingName = new JLabel(getUtilitiesDAOImplHelper().getCustomerFirstName(userName));
+				jLabelGreetingName.setForeground(Color.MAGENTA);
+				jLabelGreetingName.setFont(new Font("Calibri", Font.BOLD | Font.ITALIC, 20));
+				jLabelGreetingName.setBounds(240, 55, 200, 17);
+				jContentPane.add(jLabelGreetingName);
+			}
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
 		JButton jButtonModifyAccount = new JButton("Modify Account");
 		jButtonModifyAccount.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				
+				try {
+					String customerFirstName = jLabelGreetingName.getText();
+					ModifyAccount modifyAccount = new ModifyAccount(customerFirstName);
+					modifyAccount.setVisible(true);
+				} catch (ParseException e) {
+					e.printStackTrace();
+				}
 			}
 		});
 		jButtonModifyAccount.setFont(new Font("Calibri", Font.BOLD, 18));
@@ -175,22 +198,6 @@ public class Purchase extends JFrame {
 
 		setDate();
 		displayTable();
-
-		JLabel jLabelGreetingName;
-		try {
-			if (userName != null) {
-				jLabelGreetingName = new JLabel(getUtilitiesDAOImplHelper().getCustomerFirstName(userName));
-				jLabelGreetingName.setForeground(Color.MAGENTA);
-				jLabelGreetingName.setFont(new Font("Calibri", Font.BOLD | Font.ITALIC, 20));
-				jLabelGreetingName.setBounds(240, 55, 200, 17);
-				jContentPane.add(jLabelGreetingName);
-			}
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-
 	}
 
 	private UtilitiesDAOImpl getUtilitiesDAOImplHelper() throws FileNotFoundException, SQLException {
@@ -235,4 +242,5 @@ public class Purchase extends JFrame {
 	private DBUtilitiesDAOImpl getDBUtilitiesDAOImplHelper() {
 		return DBUtilitiesDAOImpl.getInstance();
 	}
+
 }

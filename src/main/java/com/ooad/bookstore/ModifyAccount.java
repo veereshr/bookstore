@@ -10,25 +10,25 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.border.EmptyBorder;
-
 import com.ooad.bookstore.model.Customer;
+import com.ooad.bookstore.util.DBConnection;
 import com.ooad.bookstore.util.DBUtilitiesDAOImpl;
-
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-
 import java.awt.Font;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.JRadioButton;
 import java.awt.Color;
-
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.io.FileNotFoundException;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.awt.event.ActionEvent;
@@ -55,7 +55,6 @@ public class ModifyAccount extends JFrame {
 	private Matcher matcher;
 	private static final String PASSWORD_REGEX = "((?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%]).{6,20})";
 	private static final String NAME_REGEX = "[a-zA-Z]+";
-	private static final String NAME_ON_CARD_REGEX = "([a-zA-Z]+|[a-zA-Z]+\\\\s[a-zA-Z]+)";
 	private static final String VALID_DATE_REGEX = "\\d{2}\\/\\d{2}";
 	private static final int MAX_LETTERS_IN_NAME = 20;
 	private static final int MIN_LETTERS_IN_NAME = 3;
@@ -69,7 +68,7 @@ public class ModifyAccount extends JFrame {
 	private static final int MOBILE_NUMBER_LENGTH = 10;
 	private static final int CARD_NUMBER_LENGTH = 16;
 
-	public ModifyAccount() throws ParseException {
+	public ModifyAccount(String customerFirstName) throws ParseException {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(150, 150, 1000, 600);
 		contentPane = new JPanel();
@@ -88,12 +87,16 @@ public class ModifyAccount extends JFrame {
 		jLabelFirstname.setBounds(37, 54, 103, 20);
 		contentPane.add(jLabelFirstname);
 
+		ArrayList<String> arrayList;
+		arrayList = getCustomerDetails(customerFirstName);
+
 		jTextFieldFirstName = new JTextField();
 		jTextFieldFirstName.setColumns(10);
 		jTextFieldFirstName.setBounds(201, 53, 175, 24);
 		jTextFieldFirstName.setToolTipText(
 				"Enter your FirstName. It should have minimum 3 characters and " + "maximum 20 characters");
 		contentPane.add(jTextFieldFirstName);
+		jTextFieldFirstName.setText(customerFirstName);
 
 		JLabel jLabelLastname = new JLabel("*LastName");
 		jLabelLastname.setFont(new Font("Calibri", Font.ITALIC, 20));
@@ -106,6 +109,7 @@ public class ModifyAccount extends JFrame {
 		jTextFieldLastName.setToolTipText(
 				"Enter your LastName. It should have minimum 3 characters and maximum" + " 20 characters");
 		contentPane.add(jTextFieldLastName);
+		jTextFieldLastName.setText(arrayList.get(1));
 
 		JLabel jLabelUserID = new JLabel("*User ID");
 		jLabelUserID.setFont(new Font("Calibri", Font.ITALIC, 20));
@@ -118,6 +122,7 @@ public class ModifyAccount extends JFrame {
 		jTextFieldUserID.setToolTipText(
 				"Enter your userID. It should have minimum 3 characters and maximum " + "10 characters");
 		contentPane.add(jTextFieldUserID);
+		jTextFieldUserID.setText(arrayList.get(2));
 
 		JLabel jLabelPassword = new JLabel("*Password");
 		jLabelPassword.setFont(new Font("Calibri", Font.ITALIC, 20));
@@ -130,6 +135,7 @@ public class ModifyAccount extends JFrame {
 		jPasswordFieldPassword.setToolTipText("Password should have atleast one special character, "
 				+ "one lowercase letter, one uppercase letter, one number");
 		contentPane.add(jPasswordFieldPassword);
+		jPasswordFieldPassword.setText(arrayList.get(3));
 
 		JLabel jLabelConfirmPassword = new JLabel("*Confirm Password");
 		jLabelConfirmPassword.setFont(new Font("Calibri", Font.ITALIC, 19));
@@ -150,6 +156,7 @@ public class ModifyAccount extends JFrame {
 		jTextFieldAddressLine1.setColumns(10);
 		jTextFieldAddressLine1.setBounds(201, 282, 175, 24);
 		contentPane.add(jTextFieldAddressLine1);
+		jTextFieldAddressLine1.setText(arrayList.get(4));
 
 		JLabel jLabelAddressLine2 = new JLabel("Address Line 2");
 		jLabelAddressLine2.setFont(new Font("Calibri", Font.ITALIC, 20));
@@ -160,6 +167,7 @@ public class ModifyAccount extends JFrame {
 		jTextFieldAddressLine2.setColumns(10);
 		jTextFieldAddressLine2.setBounds(201, 329, 175, 24);
 		contentPane.add(jTextFieldAddressLine2);
+		jTextFieldAddressLine2.setText(arrayList.get(5));
 
 		JLabel jLabelState = new JLabel("*State");
 		jLabelState.setFont(new Font("Calibri", Font.ITALIC, 20));
@@ -171,6 +179,7 @@ public class ModifyAccount extends JFrame {
 		jTextFieldState.setBounds(201, 377, 175, 24);
 		jTextFieldState.setToolTipText("Enter your state");
 		contentPane.add(jTextFieldState);
+		jTextFieldState.setText(arrayList.get(6));
 
 		JLabel jLabelZipCode = new JLabel("*ZipCode");
 		jLabelZipCode.setFont(new Font("Calibri", Font.ITALIC, 20));
@@ -182,6 +191,7 @@ public class ModifyAccount extends JFrame {
 		jTextFieldZipCode.setBounds(201, 425, 175, 24);
 		jTextFieldZipCode.setToolTipText("Enter the zipcode. It should be a 5-digit number");
 		contentPane.add(jTextFieldZipCode);
+		jTextFieldZipCode.setText(arrayList.get(7));
 
 		JLabel jLabelMobile = new JLabel("*Mobile");
 		jLabelMobile.setFont(new Font("Calibri", Font.ITALIC, 20));
@@ -193,6 +203,7 @@ public class ModifyAccount extends JFrame {
 		jTextFieldMobile.setBounds(201, 476, 175, 24);
 		jTextFieldMobile.setToolTipText("Enter your 10 digit mobile number");
 		contentPane.add(jTextFieldMobile);
+		jTextFieldMobile.setText(arrayList.get(8));
 
 		JLabel jLabelGender = new JLabel("*Gender");
 		jLabelGender.setFont(new Font("Calibri", Font.ITALIC, 20));
@@ -229,6 +240,7 @@ public class ModifyAccount extends JFrame {
 		jTextFieldNameOnCard.setColumns(10);
 		jTextFieldNameOnCard.setBounds(622, 53, 191, 24);
 		contentPane.add(jTextFieldNameOnCard);
+		jTextFieldNameOnCard.setText(arrayList.get(9));
 
 		JLabel jLabelCardType = new JLabel("*Card Type");
 		jLabelCardType.setFont(new Font("Calibri", Font.ITALIC, 20));
@@ -261,6 +273,7 @@ public class ModifyAccount extends JFrame {
 		jTextFieldCardNumber.setBounds(622, 139, 191, 24);
 		jTextFieldCardNumber.setToolTipText("Enter your 16-digit card number");
 		contentPane.add(jTextFieldCardNumber);
+		jTextFieldCardNumber.setText(arrayList.get(11));
 
 		JLabel jLabelCvv = new JLabel("*CVV");
 		jLabelCvv.setFont(new Font("Calibri", Font.ITALIC, 20));
@@ -273,6 +286,7 @@ public class ModifyAccount extends JFrame {
 		jTextFieldCvv.setToolTipText(
 				"Enter your 3-digit CVV number. It should be at " + "the back of your debit/credit card");
 		contentPane.add(jTextFieldCvv);
+		jTextFieldCvv.setText(arrayList.get(10));
 
 		JLabel jLabelExpirationDate = new JLabel("*Expiration Date");
 		jLabelExpirationDate.setFont(new Font("Calibri", Font.ITALIC, 20));
@@ -284,12 +298,13 @@ public class ModifyAccount extends JFrame {
 		jTextFieldExpirationDate.setBounds(622, 224, 125, 24);
 		jTextFieldExpirationDate.setToolTipText("Enter the expiration date of your debit/credit card");
 		contentPane.add(jTextFieldExpirationDate);
+		jTextFieldExpirationDate.setText(arrayList.get(12));
 
 		JButton jButtonCancel = new JButton("Cancel");
 		jButtonCancel.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				CustomerLogin customerLogin = new CustomerLogin();
-				customerLogin.setVisible(true);
+				Purchase purchase = new Purchase(jTextFieldUserID.getText());
+				purchase.setVisible(true);
 			}
 		});
 		jButtonCancel.setFont(new Font("Calibri", Font.BOLD, 20));
@@ -391,7 +406,7 @@ public class ModifyAccount extends JFrame {
 						alert[count] = "Enter a valid Zipcode" + "\n";
 						count++;
 					} else {
-						getCustomerHelper().setCustomerZipCode(Integer.parseInt(jTextFieldZipCode.getText()));
+						getCustomerHelper().setCustomerZipCode(jTextFieldZipCode.getText());
 					}
 
 					// Checkpoint for State
@@ -417,9 +432,6 @@ public class ModifyAccount extends JFrame {
 					if (jTextFieldNameOnCard.getText().equals("")) {
 						alert[count] = "No Data entered for the Name on card field" + "\n";
 						count++;
-					} else if (!(jTextFieldNameOnCard.getText().matches(NAME_ON_CARD_REGEX))) {
-						alert[count] = "Enter a valid Name present in your card" + "\n";
-						count++;
 					} else {
 						getCustomerHelper().setNameonCard(jTextFieldNameOnCard.getText());
 					}
@@ -432,7 +444,7 @@ public class ModifyAccount extends JFrame {
 						alert[count] = "Enter a valid CVV number" + "\n";
 						count++;
 					} else {
-						getCustomerHelper().setCvv(Integer.parseInt(jTextFieldCvv.getText()));
+						getCustomerHelper().setCvv(jTextFieldCvv.getText());
 					}
 
 					// Checkpoint for Card Number
@@ -468,7 +480,7 @@ public class ModifyAccount extends JFrame {
 
 				if (count == 0) {
 					try {
-						getCustomerHelper().setResponse(getDBUtilitiesDAOImplHelper().updateCustomerDetails());
+						getCustomerHelper().setResponse(updateCustomerDetails());
 					} catch (FileNotFoundException e1) {
 						e1.printStackTrace();
 					} catch (SQLException e1) {
@@ -476,11 +488,11 @@ public class ModifyAccount extends JFrame {
 					}
 					if (getCustomerHelper().getResponse() == DBUtilitiesDAOImpl.SUCCESS) {
 						JOptionPane.showMessageDialog(null,
-								getCustomerHelper().getUserID() + " your account has been created!");
+								getCustomerHelper().getUserID() + " your account has been modified!");
 						contentPane.setVisible(false);
 						JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(contentPane);
 						frame.dispose();
-						new CustomerLogin().setVisible(true);
+						new Purchase(jTextFieldUserID.getText()).setVisible(true);
 					} else if (getCustomerHelper()
 							.getResponse() == DBUtilitiesDAOImpl.SQL_INTEGRITY_CONSTRAIN_VIOLATION_EXCEPTION) {
 						JOptionPane.showMessageDialog(null, "Sorry " + getCustomerHelper().getUserID()
@@ -495,6 +507,36 @@ public class ModifyAccount extends JFrame {
 			private boolean isValidPassword() {
 				matcher = pattern.matcher(jPasswordFieldPassword.getText());
 				return matcher.matches();
+			}
+
+			public int updateCustomerDetails() throws SQLException, FileNotFoundException {
+
+				String customerRegistration = "UPDATE customerAccount set customerID=?, customerFirstName=?, customerLastName=?, "
+						+ "customerPassword=?, customerAddress1=?, customerAddress2=?, customerState=?, customerZipCode=?, customerMobileNumber=?,"
+						+ "customerNameonCard=?, customerCVV=?, customerCardNumber=?, customerExpiry=? where customerFirstName=" + "'" + jTextFieldFirstName.getText() + "'";
+				try {
+					PreparedStatement preparedStatement = DBConnection.getConnection(DBUtilitiesDAOImpl.DATABASE_NAME)
+							.prepareStatement(customerRegistration);
+					preparedStatement.setString(1, getCustomerHelper().getUserID());
+					preparedStatement.setString(2, getCustomerHelper().getCustomerFirstName());
+					preparedStatement.setString(3, getCustomerHelper().getCustomerLastName());
+					preparedStatement.setString(4, getCustomerHelper().getCustomerPassword());
+					preparedStatement.setString(5, getCustomerHelper().getCustomerAddress1());
+					preparedStatement.setString(6, getCustomerHelper().getCustomerAddress2());
+					preparedStatement.setString(7, getCustomerHelper().getCustomerState());
+					preparedStatement.setString(8, getCustomerHelper().getCustomerZipCode());
+					preparedStatement.setString(9, getCustomerHelper().getMobileNumber());
+					preparedStatement.setString(10, getCustomerHelper().getNameonCard());
+					preparedStatement.setString(11, getCustomerHelper().getCvv());
+					preparedStatement.setString(12, getCustomerHelper().getCardNumber());
+					preparedStatement.setString(13, getCustomerHelper().getExpiry());
+
+					preparedStatement.executeUpdate();
+					return DBUtilitiesDAOImpl.SUCCESS;
+				} catch (SQLException e) {
+					e.printStackTrace();
+					return DBUtilitiesDAOImpl.SQL_EXCEPTION;
+				}
 			}
 		});
 		btnSubmit.setFont(new Font("Calibri", Font.BOLD, 20));
@@ -512,18 +554,53 @@ public class ModifyAccount extends JFrame {
 		jLabelTip2.setFont(new Font("Calibri", Font.ITALIC, 20));
 		jLabelTip2.setBounds(456, 411, 357, 24);
 		contentPane.add(jLabelTip2);
+
 	}
 
 	private Customer getCustomerHelper() {
 		return Customer.getInstance();
 	}
 
-	private DBUtilitiesDAOImpl getDBUtilitiesDAOImplHelper() {
-		return DBUtilitiesDAOImpl.getInstance();
-	}
-
 	public String returnUserID() {
 		String userID = jTextFieldUserID.getText();
 		return userID;
 	}
+
+	private ArrayList<String> getCustomerDetails(String customerFirstName) {
+
+		String getCustomerDetails = "SELECT customerFirstName, customerLastName, customerID, "
+				+ "customerPassword, customerAddress1, customerAddress2, customerState, "
+				+ "customerZipCode, customerMobileNumber, customerNameOnCard, customerCVV, "
+				+ "customerCardNumber, customerExpiry FROM customerAccount WHERE " + "customerFirstName = " + "'"
+				+ customerFirstName + "'";
+		PreparedStatement prepareStatement;
+		try {
+			prepareStatement = DBConnection.getConnection(DBUtilitiesDAOImpl.DATABASE_NAME)
+					.prepareStatement(getCustomerDetails);
+			ResultSet resultSet = prepareStatement.executeQuery();
+			ArrayList<String> arrayList = new ArrayList<String>();
+			while (resultSet.next()) {
+				arrayList.add(resultSet.getString("customerFirstName"));
+				arrayList.add(resultSet.getString("customerLastName"));
+				arrayList.add(resultSet.getString("customerID"));
+				arrayList.add(resultSet.getString("customerPassword"));
+				arrayList.add(resultSet.getString("customerAddress1"));
+				arrayList.add(resultSet.getString("customerAddress2"));
+				arrayList.add(resultSet.getString("customerState"));
+				arrayList.add(resultSet.getString("customerZipCode"));
+				arrayList.add(resultSet.getString("customerMobileNumber"));
+				arrayList.add(resultSet.getString("customerNameonCard"));
+				arrayList.add(resultSet.getString("customerCVV"));
+				arrayList.add(resultSet.getString("customerCardNumber"));
+				arrayList.add(resultSet.getString("customerExpiry"));
+			}
+			return arrayList;
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
 }

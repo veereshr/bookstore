@@ -16,13 +16,13 @@ public class Customer {
 	String customerAddress1;
 	String customerAddress2;
 	String customerState;
-	int customerZipCode;
+	String customerZipCode;
 	String mobileNumber;
 	boolean customerGender;
 	String nameonCard;
 	boolean cardType;
 	String cardNumber;
-	int cvv;
+	String cvv;
 	String expiry;
 	int response;
 
@@ -103,11 +103,11 @@ public class Customer {
 		this.customerState = customerState;
 	}
 
-	public int getCustomerZipCode() {
+	public String getCustomerZipCode() {
 		return customerZipCode;
 	}
 
-	public void setCustomerZipCode(int customerZipCode) {
+	public void setCustomerZipCode(String customerZipCode) {
 		this.customerZipCode = customerZipCode;
 	}
 
@@ -151,11 +151,11 @@ public class Customer {
 		this.cardNumber = cardNumber;
 	}
 
-	public int getCvv() {
+	public String getCvv() {
 		return cvv;
 	}
 
-	public void setCvv(int cvv) {
+	public void setCvv(String cvv) {
 		this.cvv = cvv;
 	}
 
