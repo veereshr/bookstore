@@ -5,7 +5,6 @@ import java.io.FileNotFoundException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
 import javax.swing.table.AbstractTableModel;
 
 @SuppressWarnings("serial")
@@ -97,9 +96,9 @@ public class UtilitiesDAOImpl extends AbstractTableModel {
 	public Object getValueAt(int rowIndex, int columnIndex) {
 		return this.rows[rowIndex][columnIndex];
 	}
-	
-	public String getColumnName(int column)
-	{
+
+	public String getColumnName(int column) {
 		return this.columns[column];
 	}
+
 }
