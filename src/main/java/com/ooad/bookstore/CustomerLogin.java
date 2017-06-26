@@ -32,6 +32,7 @@ public class CustomerLogin extends JFrame {
 	private JButton jButtonLogin;
 	private JButton jButtonNewUser;
 	private JLabel jLabelHeading;
+	private JButton jButtonGuestLogin;
 
 	public CustomerLogin() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -74,6 +75,7 @@ public class CustomerLogin extends JFrame {
 						if (validateLogin(userName, password)) {
 							Purchase dashboard = new Purchase(userName);
 							dashboard.setVisible(true);
+							dispose();
 						} else {
 							JOptionPane.showMessageDialog(null, "Incorrect Credentials");
 						}
@@ -105,6 +107,7 @@ public class CustomerLogin extends JFrame {
 				try {
 					SignUp signup = new SignUp();
 					signup.setVisible(true);
+					dispose();
 				} catch (ParseException pe) {
 					pe.printStackTrace();
 				}
@@ -118,6 +121,17 @@ public class CustomerLogin extends JFrame {
 		jLabelHeading.setForeground(Color.ORANGE);
 		jLabelHeading.setBounds(344, 99, 329, 47);
 		contentPane.add(jLabelHeading);
+		jButtonGuestLogin = new JButton("Continue as Guest");
+		jButtonGuestLogin.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Purchase dashboard = new Purchase();
+				dashboard.setVisible(true);
+				dispose();
+			}
+		});
+		jButtonGuestLogin.setFont(new Font("Calibri", Font.BOLD, 20));
+		jButtonGuestLogin.setBounds(376, 398, 290, 33);
+		contentPane.add(jButtonGuestLogin);
 	}
 
 	private UtilitiesDAOImpl getUtilitiesDAOImplHelper() throws FileNotFoundException, SQLException {

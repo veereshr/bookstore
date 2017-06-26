@@ -52,7 +52,6 @@ public class SignUp extends JFrame {
 	private Matcher matcher;
 	private static final String PASSWORD_REGEX = "((?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%]).{6,20})";
 	private static final String NAME_REGEX = "[a-zA-Z]+";
-	private static final String NAME_ON_CARD_REGEX = "([a-zA-Z]+|[a-zA-Z]+\\\\s[a-zA-Z]+)";
 	private static final String VALID_DATE_REGEX = "\\d{2}\\/\\d{2}";
 	private static final int MAX_LETTERS_IN_NAME = 20;
 	private static final int MIN_LETTERS_IN_NAME = 3;
@@ -414,9 +413,6 @@ public class SignUp extends JFrame {
 					// Checkpoint for Name on Card
 					if (jTextFieldNameOnCard.getText().equals("")) {
 						alert[count] = "No Data entered for the Name on card field" + "\n";
-						count++;
-					} else if (!(jTextFieldNameOnCard.getText().matches(NAME_ON_CARD_REGEX))) {
-						alert[count] = "Enter a valid Name present in your card" + "\n";
 						count++;
 					} else {
 						getCustomerHelper().setNameonCard(jTextFieldNameOnCard.getText());
