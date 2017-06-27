@@ -20,6 +20,7 @@ import java.awt.event.ActionEvent;
 import java.io.FileNotFoundException;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.awt.Color;
 
 /***
  * 
@@ -94,6 +95,7 @@ public class DataEntry extends JFrame {
 			contentPane.add(lblBookType);
 
 			JButton btnSave = new JButton("Save");
+			btnSave.setBackground(Color.CYAN);
 			btnSave.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					String bookName = textField_0.getText();
@@ -147,6 +149,7 @@ public class DataEntry extends JFrame {
 			contentPane.add(textField_4);
 
 			btnCancel = new JButton("Cancel");
+			btnCancel.setBackground(Color.CYAN);
 			btnCancel.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					BookInventory bookInventory = new BookInventory(userName);
