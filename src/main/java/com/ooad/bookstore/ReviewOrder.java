@@ -92,15 +92,11 @@ public class ReviewOrder extends JFrame {
 		btnContinueShopping.setBackground(Color.CYAN);
 		btnContinueShopping.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				if (Purchase.jLabelGreetingNameGuest.getText() == "Guest") {
-					Purchase purchase = new Purchase();
-					purchase.setVisible(true);
-					dispose();
-				} else {
-					Purchase purchase = new Purchase(Purchase.jLabelGreetingNameUser.getText());
-					purchase.setVisible(true);
-					dispose();
-				}
+
+				Purchase purchase = new Purchase(Purchase.jLabelGreetingNameUser.getText());
+				purchase.setVisible(true);
+				dispose();
+
 			}
 		});
 		btnContinueShopping.setFont(new Font("Calibri", Font.BOLD, 16));
