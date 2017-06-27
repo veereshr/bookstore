@@ -19,7 +19,6 @@ unique (customerID),
 primary key (customerID));
 
 create table if not exists bookDetails (bookID int(10) not null auto_increment,
-bookIcon mediumblob,
 bookName varchar(20) not null,
 bookType varchar(10) not null,
 bookAvailability int(10) not null,

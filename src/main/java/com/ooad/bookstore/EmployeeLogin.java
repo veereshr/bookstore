@@ -90,6 +90,7 @@ public class EmployeeLogin extends JFrame {
 						if (validateLogin(userName, password)) {
 							BookInventory inventory = new BookInventory(userName);
 							inventory.setVisible(true);
+							dispose();
 						} else {
 							JOptionPane.showMessageDialog(null, "Incorrect Credentials");
 						}
