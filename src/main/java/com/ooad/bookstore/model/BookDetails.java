@@ -8,10 +8,19 @@ package com.ooad.bookstore.model;
 
 public class BookDetails {
 
+	private String ISBN;
 	private String book;
 	private String type;
 	private String availability;
 	private String price;
+
+	public String getISBN() {
+		return ISBN;
+	}
+
+	public void setISBN(String iSBN) {
+		ISBN = iSBN;
+	}
 
 	public String getBook() {
 		return book;

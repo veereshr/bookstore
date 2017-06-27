@@ -69,7 +69,7 @@ public class DBUtilitiesDAOImpl {
 
 	public ArrayList<BookDetails> getBookDetails() {
 
-		String getBookDetails = "SELECT bookName, bookType, bookAvailability, bookPrice FROM bookDetails";
+		String getBookDetails = "SELECT bookID, bookName, bookType, bookAvailability, bookPrice FROM bookDetails";
 		PreparedStatement prepareStatement;
 		try {
 			prepareStatement = DBConnection.getConnection(DATABASE_NAME).prepareStatement(getBookDetails);
@@ -77,6 +77,7 @@ public class DBUtilitiesDAOImpl {
 			ArrayList<BookDetails> arrayList = new ArrayList<BookDetails>();
 			while (resultSet.next()) {
 				BookDetails bookDetails = new BookDetails();
+				bookDetails.setISBN(resultSet.getString("bookID"));
 				bookDetails.setBook(resultSet.getString("bookName"));
 				bookDetails.setType(resultSet.getString("bookType"));
 				bookDetails.setAvailability(resultSet.getString("bookAvailability"));

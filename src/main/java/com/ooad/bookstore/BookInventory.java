@@ -3,12 +3,14 @@ package com.ooad.bookstore;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -21,9 +23,11 @@ import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.Timer;
@@ -31,6 +35,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
 import com.ooad.bookstore.model.BookDetails;
+import com.ooad.bookstore.util.DBConnection;
 import com.ooad.bookstore.util.DBUtilitiesDAOImpl;
 import com.ooad.bookstore.util.UtilitiesDAOImpl;
 
@@ -42,8 +47,9 @@ public class BookInventory extends JFrame {
 	JLabel jLabelDate;
 	private static final String CART_ICON = "src/main/resources/cart.jpg";
 	private JTable jTable;
+	JLabel jLabelGreetingName;
 
-	public BookInventory(String userName) {
+	public BookInventory(final String userName) {
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(150, 150, 1000, 600);
@@ -53,7 +59,8 @@ public class BookInventory extends JFrame {
 		setContentPane(jContentPane);
 
 		JLabel jLabelWelcomeNote = new JLabel("Welcome to Book Inventory");
-		jLabelWelcomeNote.setFont(new Font("Calibri", Font.BOLD | Font.ITALIC, 20));
+		jLabelWelcomeNote.setFont(new Font("Calibri", Font.BOLD | Font.ITALIC,
+				20));
 
 		JLabel jLabelTime = new JLabel("Time");
 		jLabelTime.setFont(new Font("Calibri", Font.BOLD, 20));
@@ -78,31 +85,53 @@ public class BookInventory extends JFrame {
 			e.printStackTrace();
 		}
 
-		JButton jButtonModifyAccount = new JButton("Add book");
-		jButtonModifyAccount.addActionListener(new ActionListener() {
+		JButton jButtonAddBook = new JButton("Add book");
+		jButtonAddBook.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				
+				DataEntry dataEntry = new DataEntry(userName, "add");
+				dataEntry.setVisible(true);
+				dispose();
 			}
 		});
-		jButtonModifyAccount.setFont(new Font("Calibri", Font.BOLD, 18));
+		jButtonAddBook.setFont(new Font("Calibri", Font.BOLD, 18));
 
 		JLabel jLabel = new JLabel("Book Inventory");
 		jLabel.setForeground(Color.ORANGE);
-		jLabel.setFont(new Font("Century Schoolbook", Font.BOLD | Font.ITALIC, 36));
+		jLabel.setFont(new Font("Century Schoolbook", Font.BOLD | Font.ITALIC,
+				36));
 
 		JScrollPane jScrollPane = new JScrollPane();
-		jScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
-		jScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		jScrollPane
+				.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
+		jScrollPane
+				.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		getContentPane().add(jScrollPane, BorderLayout.CENTER);
-		
-		JButton btnEditBook = new JButton("Edit Book");
+
+		JButton btnEditBook = new JButton("Logout");
 		btnEditBook.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				EmployeeLogin login = new EmployeeLogin();
+				login.setVisible(true);
+				dispose();
 			}
 		});
 		btnEditBook.setFont(new Font("Calibri", Font.BOLD, 18));
-		
+
 		JButton btnDeleteBook = new JButton("Delete Book");
+		btnDeleteBook.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String ISBN = (String) jTable.getValueAt(
+						jTable.getSelectedRow(), 0);
+				if(deleteBook(ISBN)==DBUtilitiesDAOImpl.SUCCESS){
+					JOptionPane.showMessageDialog(null,
+							"Successfully deleted book from the database");
+				}
+				BookInventory bookInventory = new BookInventory(userName);
+				bookInventory.setVisible(true);
+				dispose();
+				
+			}
+		});
 		btnDeleteBook.setFont(new Font("Calibri", Font.BOLD, 18));
 		GroupLayout groupLayoutJContentPane = new GroupLayout(jContentPane);
 		groupLayoutJContentPane.setHorizontalGroup(
@@ -126,11 +155,14 @@ public class BookInventory extends JFrame {
 								.addComponent(jScrollPane, GroupLayout.PREFERRED_SIZE, 738, GroupLayout.PREFERRED_SIZE))
 							.addGap(2)
 							.addGroup(groupLayoutJContentPane.createParallelGroup(Alignment.LEADING)
-								.addComponent(jButtonModifyAccount, GroupLayout.PREFERRED_SIZE, 159, GroupLayout.PREFERRED_SIZE)
 								.addComponent(btnDeleteBook, GroupLayout.PREFERRED_SIZE, 159, GroupLayout.PREFERRED_SIZE)
-								.addComponent(btnEditBook, GroupLayout.PREFERRED_SIZE, 159, GroupLayout.PREFERRED_SIZE)
+								.addComponent(jButtonAddBook, GroupLayout.PREFERRED_SIZE, 159, GroupLayout.PREFERRED_SIZE)
 								.addComponent(jLabelDate, GroupLayout.PREFERRED_SIZE, 151, GroupLayout.PREFERRED_SIZE))))
 					.addContainerGap(19, Short.MAX_VALUE))
+				.addGroup(Alignment.TRAILING, groupLayoutJContentPane.createSequentialGroup()
+					.addContainerGap(805, Short.MAX_VALUE)
+					.addComponent(btnEditBook, GroupLayout.PREFERRED_SIZE, 159, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap())
 		);
 		groupLayoutJContentPane.setVerticalGroup(
 			groupLayoutJContentPane.createParallelGroup(Alignment.LEADING)
@@ -138,13 +170,10 @@ public class BookInventory extends JFrame {
 					.addGap(4)
 					.addGroup(groupLayoutJContentPane.createParallelGroup(Alignment.LEADING)
 						.addGroup(groupLayoutJContentPane.createSequentialGroup()
+							.addGap(15)
 							.addGroup(groupLayoutJContentPane.createParallelGroup(Alignment.LEADING)
-								.addGroup(groupLayoutJContentPane.createSequentialGroup()
-									.addGap(15)
-									.addComponent(jLabelTime, GroupLayout.PREFERRED_SIZE, 19, GroupLayout.PREFERRED_SIZE))
-								.addGroup(groupLayoutJContentPane.createSequentialGroup()
-									.addGap(15)
-									.addComponent(jLabelDateTime, GroupLayout.PREFERRED_SIZE, 19, GroupLayout.PREFERRED_SIZE)))
+								.addComponent(jLabelTime, GroupLayout.PREFERRED_SIZE, 19, GroupLayout.PREFERRED_SIZE)
+								.addComponent(jLabelDateTime, GroupLayout.PREFERRED_SIZE, 19, GroupLayout.PREFERRED_SIZE))
 							.addGap(12)
 							.addGroup(groupLayoutJContentPane.createParallelGroup(Alignment.LEADING)
 								.addComponent(jLabelWelcomeNote, GroupLayout.PREFERRED_SIZE, 19, GroupLayout.PREFERRED_SIZE)
@@ -154,24 +183,28 @@ public class BookInventory extends JFrame {
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addGroup(groupLayoutJContentPane.createParallelGroup(Alignment.LEADING)
 						.addGroup(groupLayoutJContentPane.createSequentialGroup()
-							.addGap(69)
-							.addComponent(jButtonModifyAccount, GroupLayout.PREFERRED_SIZE, 38, GroupLayout.PREFERRED_SIZE)
-							.addGap(18)
-							.addComponent(btnEditBook, GroupLayout.PREFERRED_SIZE, 38, GroupLayout.PREFERRED_SIZE)
-							.addGap(18)
-							.addComponent(btnDeleteBook, GroupLayout.PREFERRED_SIZE, 38, GroupLayout.PREFERRED_SIZE))
-						.addGroup(groupLayoutJContentPane.createSequentialGroup()
 							.addGap(25)
-							.addComponent(jScrollPane, GroupLayout.PREFERRED_SIZE, 434, GroupLayout.PREFERRED_SIZE))))
+							.addComponent(jScrollPane, GroupLayout.PREFERRED_SIZE, 434, GroupLayout.PREFERRED_SIZE))
+						.addGroup(groupLayoutJContentPane.createSequentialGroup()
+							.addGap(69)
+							.addComponent(jButtonAddBook, GroupLayout.PREFERRED_SIZE, 38, GroupLayout.PREFERRED_SIZE)
+							.addGap(18)
+							.addComponent(btnDeleteBook, GroupLayout.PREFERRED_SIZE, 38, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.RELATED, 246, Short.MAX_VALUE)
+							.addComponent(btnEditBook, GroupLayout.PREFERRED_SIZE, 38, GroupLayout.PREFERRED_SIZE)
+							.addGap(35))))
 		);
 
 		jTable = new JTable();
-		jTable.setModel(new DefaultTableModel(
-				new Object[][] { { null, null, null, null, null, null, null },
-						{ null, null, null, null, null, null, null }, { null, null, null, null, null, null, null },
-						{ null, null, null, null, null, null, null }, { null, null, null, null, null, null, null },
-						{ null, null, null, null, null, null, null }, { null, null, null, null, null, null, null }, },
-				new String[] {"Book", "Type", "Availability", "Price", "Select", "Quantity" }));
+		jTable.setModel(new DefaultTableModel(new Object[][] {
+				{ null, null, null, null, null },
+				{ null, null, null, null, null },
+				{ null, null, null, null, null },
+				{ null, null, null, null, null },
+				{ null, null, null, null, null },
+				{ null, null, null, null, null },
+				{ null, null, null, null, null }, }, new String[] { "ISBN",
+				"Book", "Type", "Availability", "Price" }));
 		jScrollPane.setViewportView(jTable);
 		jContentPane.setLayout(groupLayoutJContentPane);
 
@@ -181,9 +214,11 @@ public class BookInventory extends JFrame {
 		JLabel jLabelGreetingName;
 		try {
 			if (userName != null) {
-				jLabelGreetingName = new JLabel(getUtilitiesDAOImplHelper().getCustomerFirstName(userName));
+				jLabelGreetingName = new JLabel(getUtilitiesDAOImplHelper()
+						.getCustomerFirstName(userName));
 				jLabelGreetingName.setForeground(Color.MAGENTA);
-				jLabelGreetingName.setFont(new Font("Calibri", Font.BOLD | Font.ITALIC, 20));
+				jLabelGreetingName.setFont(new Font("Calibri", Font.BOLD
+						| Font.ITALIC, 20));
 				jLabelGreetingName.setBounds(240, 55, 200, 17);
 				jContentPane.add(jLabelGreetingName);
 			}
@@ -195,7 +230,29 @@ public class BookInventory extends JFrame {
 
 	}
 
-	private UtilitiesDAOImpl getUtilitiesDAOImplHelper() throws FileNotFoundException, SQLException {
+	protected int deleteBook(String ISBN) {
+
+		String insertBook = "DELETE from bookdetails where bookID=?";
+		try {
+			PreparedStatement preparedStatement = DBConnection.getConnection(
+					DBUtilitiesDAOImpl.DATABASE_NAME).prepareStatement(
+					insertBook);
+			preparedStatement.setString(1, ISBN);
+			preparedStatement.executeUpdate();
+			return DBUtilitiesDAOImpl.SUCCESS;
+	}
+		catch (SQLException e) {
+			e.printStackTrace();
+			return DBUtilitiesDAOImpl.SQL_EXCEPTION;
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return 0;
+	}
+
+	private UtilitiesDAOImpl getUtilitiesDAOImplHelper()
+			throws FileNotFoundException, SQLException {
 		return UtilitiesDAOImpl.getInstance();
 	}
 
@@ -203,7 +260,8 @@ public class BookInventory extends JFrame {
 		ActionListener actionListener = new ActionListener() {
 			public void actionPerformed(ActionEvent ae) {
 				SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm:ss");
-				SimpleDateFormat dateFormat = new SimpleDateFormat("EEE, d MMM yyyy");
+				SimpleDateFormat dateFormat = new SimpleDateFormat(
+						"EEE, d MMM yyyy");
 				Calendar calendar = Calendar.getInstance();
 				Date date = calendar.getTime();
 				jLabelDateTime.setText(timeFormat.format(date));
@@ -217,14 +275,15 @@ public class BookInventory extends JFrame {
 	public void displayTable() {
 		ArrayList<BookDetails> arrayList = new ArrayList<BookDetails>();
 		arrayList = getDBUtilitiesDAOImplHelper().getBookDetails();
-		String[] columns = { "Book", "Type", "Availability", "Price", "Select", "Quantity" };
-		Object[][] rows = new Object[arrayList.size()][6];
+		String[] columns = { "ISBN", "Book", "Type", "Availability", "Price" };
+		Object[][] rows = new Object[arrayList.size()][5];
 
 		for (int i = 0; i < arrayList.size(); i++) {
-			rows[i][0] = arrayList.get(i).getBook();
-			rows[i][1] = arrayList.get(i).getType();
-			rows[i][2] = arrayList.get(i).getAvailability();
-			rows[i][3] = arrayList.get(i).getPrice();
+			rows[i][0] = arrayList.get(i).getISBN();
+			rows[i][1] = arrayList.get(i).getBook();
+			rows[i][2] = arrayList.get(i).getType();
+			rows[i][3] = arrayList.get(i).getAvailability();
+			rows[i][4] = arrayList.get(i).getPrice();
 
 		}
 		UtilitiesDAOImpl utilitiesDAOImpl = new UtilitiesDAOImpl(rows, columns);

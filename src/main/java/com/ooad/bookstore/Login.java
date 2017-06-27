@@ -100,7 +100,6 @@ public class Login {
 			public void actionPerformed(ActionEvent actionEvent) {
 				EmployeeLogin employeeLogin = new EmployeeLogin();
 				employeeLogin.setVisible(true);
-
 			}
 		});
 		
