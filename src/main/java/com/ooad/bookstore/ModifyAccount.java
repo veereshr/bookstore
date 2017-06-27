@@ -301,6 +301,7 @@ public class ModifyAccount extends JFrame {
 		jTextFieldExpirationDate.setText(arrayList.get(12));
 
 		JButton jButtonCancel = new JButton("Cancel");
+		jButtonCancel.setBackground(Color.CYAN);
 		jButtonCancel.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Purchase purchase = new Purchase(jTextFieldUserID.getText());
@@ -312,6 +313,7 @@ public class ModifyAccount extends JFrame {
 		contentPane.add(jButtonCancel);
 
 		JButton btnSubmit = new JButton("Submit");
+		btnSubmit.setBackground(Color.CYAN);
 		pattern = Pattern.compile(PASSWORD_REGEX);
 		btnSubmit.addActionListener(new ActionListener() {
 			@SuppressWarnings("deprecation")
@@ -395,7 +397,7 @@ public class ModifyAccount extends JFrame {
 
 					// Checkpoint for Address Line 2
 					if (!(jTextFieldAddressLine2.getText().equals(""))) {
-						getCustomerHelper().setCustomerAddress1(jTextFieldAddressLine2.getText());
+						getCustomerHelper().setCustomerAddress2(jTextFieldAddressLine2.getText());
 					} else if (jTextFieldAddressLine2.getText().length() > MAX_LETTERS_IN_ADDRESS) {
 						alert[count] = "Address cannot exceed more than 50 Characters" + "\n";
 						count++;

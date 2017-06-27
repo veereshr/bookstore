@@ -1,11 +1,17 @@
 package com.ooad.bookstore.util;
 
-
+import java.awt.Component;
 import java.io.FileNotFoundException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+
+import javax.swing.JButton;
+import javax.swing.JPanel;
+import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.table.AbstractTableModel;
+import javax.swing.table.TableCellRenderer;
 
 @SuppressWarnings("serial")
 public class UtilitiesDAOImpl extends AbstractTableModel {
@@ -49,13 +55,12 @@ public class UtilitiesDAOImpl extends AbstractTableModel {
 		return null;
 	}
 
-	
 	public boolean validateEmployeeCredentials(String id, String password) {
 
 		PreparedStatement preparedStatement;
 		try {
-			preparedStatement = DBConnection.getConnection(DBUtilitiesDAOImpl.DATABASE_NAME).prepareStatement(
-					"Select accpass from employee where id =" + "'" + id + "'");
+			preparedStatement = DBConnection.getConnection(DBUtilitiesDAOImpl.DATABASE_NAME)
+					.prepareStatement("Select accpass from employee where id =" + "'" + id + "'");
 			ResultSet resultSet = preparedStatement.executeQuery();
 			if (resultSet.next()) {
 				return resultSet.getString("accpass").equals(password);
@@ -67,7 +72,7 @@ public class UtilitiesDAOImpl extends AbstractTableModel {
 		}
 		return false;
 	}
-	
+
 	public String getCustomerFirstName(String customerID) {
 		PreparedStatement preparedStatement;
 		try {
@@ -101,4 +106,21 @@ public class UtilitiesDAOImpl extends AbstractTableModel {
 		return this.columns[column];
 	}
 
+	@Override
+	public boolean isCellEditable(int row, int column) {
+		return column == 5;
+	}
+
+	@Override
+	public void setValueAt(Object value, int rowIndex, int colIndex) {
+
+		if (colIndex == 5) {
+			boolean select = (Boolean) value;
+			rows[rowIndex][colIndex] = select;
+		}
+
+		super.setValueAt(value, rowIndex, colIndex);
+	}
 }
+
+

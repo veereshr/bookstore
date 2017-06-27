@@ -80,7 +80,6 @@ public class Login {
 			public void actionPerformed(ActionEvent actionEvent) {
 				CustomerLogin customerLogin = new CustomerLogin();
 				customerLogin.setVisible(true);
-
 			}
 		});
 		jButtonCustomerLogin.setBounds(223,128,225,232);
