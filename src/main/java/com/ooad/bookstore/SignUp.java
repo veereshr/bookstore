@@ -283,6 +283,7 @@ public class SignUp extends JFrame {
 		contentPane.add(jTextFieldExpirationDate);
 
 		JButton jButtonCancel = new JButton("Cancel");
+		jButtonCancel.setBackground(Color.CYAN);
 		jButtonCancel.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				CustomerLogin customerLogin = new CustomerLogin();
@@ -294,6 +295,7 @@ public class SignUp extends JFrame {
 		contentPane.add(jButtonCancel);
 
 		JButton btnSubmit = new JButton("Submit");
+		btnSubmit.setBackground(Color.CYAN);
 		pattern = Pattern.compile(PASSWORD_REGEX);
 		btnSubmit.addActionListener(new ActionListener() {
 			@SuppressWarnings("deprecation")

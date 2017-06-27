@@ -62,6 +62,7 @@ public class CustomerLogin extends JFrame {
 		contentPane.add(jPasswordField);
 
 		jButtonLogin = new JButton("Login");
+		jButtonLogin.setBackground(Color.CYAN);
 		jButtonLogin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent actionEvent) {
 				String userName = jTextField.getText();
@@ -101,6 +102,7 @@ public class CustomerLogin extends JFrame {
 		contentPane.add(jButtonLogin);
 
 		jButtonNewUser = new JButton("New User");
+		jButtonNewUser.setBackground(Color.CYAN);
 		jButtonNewUser.setFont(new Font("Calibri", Font.BOLD, 18));
 		jButtonNewUser.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent actionEvent) {
@@ -122,6 +124,7 @@ public class CustomerLogin extends JFrame {
 		jLabelHeading.setBounds(344, 99, 329, 47);
 		contentPane.add(jLabelHeading);
 		jButtonGuestLogin = new JButton("Continue as Guest");
+		jButtonGuestLogin.setBackground(Color.CYAN);
 		jButtonGuestLogin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Purchase dashboard = new Purchase();

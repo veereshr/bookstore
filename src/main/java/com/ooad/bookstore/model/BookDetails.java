@@ -12,6 +12,8 @@ public class BookDetails {
 	private String type;
 	private String availability;
 	private String price;
+	private boolean wishList;
+	private boolean select;
 
 	public String getBook() {
 		return book;
@@ -45,4 +47,19 @@ public class BookDetails {
 		this.price = price;
 	}
 
+	public boolean isWishList() {
+		return wishList;
+	}
+
+	public void setWishList(boolean wishList) {
+		this.wishList = wishList;
+	}
+
+	public boolean isSelect() {
+		return select;
+	}
+
+	public void setSelect(boolean select) {
+		this.select = select;
+	}
 }
