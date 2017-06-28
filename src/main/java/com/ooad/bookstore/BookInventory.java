@@ -120,22 +120,47 @@ public class BookInventory extends JFrame {
 		JButton btnDeleteBook = new JButton("Delete Book");
 		btnDeleteBook.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				String ISBN = (String) jTable.getValueAt(
-						jTable.getSelectedRow(), 0);
-				if(deleteBook(ISBN)==DBUtilitiesDAOImpl.SUCCESS){
-					JOptionPane.showMessageDialog(null,
-							"Successfully deleted book from the database");
+				try{
+					String ISBN = (String) jTable.getValueAt(
+							jTable.getSelectedRow(), 0);
+					if(deleteBook(ISBN)==DBUtilitiesDAOImpl.SUCCESS){
+						JOptionPane.showMessageDialog(null,
+								"Successfully deleted book from the database");
+					}
+					BookInventory bookInventory = new BookInventory(userName);
+					bookInventory.setVisible(true);
+					dispose();
 				}
-				BookInventory bookInventory = new BookInventory(userName);
-				bookInventory.setVisible(true);
-				dispose();
-				
+				catch(ArrayIndexOutOfBoundsException arrayIndexOutOfBoundsException){
+					JOptionPane.showMessageDialog(null,
+							"Please select a book to delete");
+				}
 			}
 		});
 		btnDeleteBook.setFont(new Font("Calibri", Font.BOLD, 18));
+		
+		JButton btnEditBook_1 = new JButton("Edit Book");
+		btnEditBook_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try{
+					String ISBN = (String) jTable.getValueAt(
+							jTable.getSelectedRow(), 0);
+						DataEntry dataEntry = new DataEntry(userName, ISBN);
+						dataEntry.setVisible(true);
+						dispose();	
+				}
+				catch(ArrayIndexOutOfBoundsException arrayIndexOutOfBoundsException){
+					JOptionPane.showMessageDialog(null,
+							"Please select a book to edit");
+				}
+				
+				
+			}
+		});
+		btnEditBook_1.setFont(new Font("Calibri", Font.BOLD, 18));
 		GroupLayout groupLayoutJContentPane = new GroupLayout(jContentPane);
 		groupLayoutJContentPane.setHorizontalGroup(
-			groupLayoutJContentPane.createParallelGroup(Alignment.LEADING)
+			groupLayoutJContentPane.createParallelGroup(Alignment.TRAILING)
 				.addGroup(groupLayoutJContentPane.createSequentialGroup()
 					.addGroup(groupLayoutJContentPane.createParallelGroup(Alignment.LEADING)
 						.addGroup(groupLayoutJContentPane.createSequentialGroup()
@@ -156,10 +181,11 @@ public class BookInventory extends JFrame {
 							.addGap(2)
 							.addGroup(groupLayoutJContentPane.createParallelGroup(Alignment.LEADING)
 								.addComponent(btnDeleteBook, GroupLayout.PREFERRED_SIZE, 159, GroupLayout.PREFERRED_SIZE)
+								.addComponent(btnEditBook_1, GroupLayout.PREFERRED_SIZE, 159, GroupLayout.PREFERRED_SIZE)
 								.addComponent(jButtonAddBook, GroupLayout.PREFERRED_SIZE, 159, GroupLayout.PREFERRED_SIZE)
 								.addComponent(jLabelDate, GroupLayout.PREFERRED_SIZE, 151, GroupLayout.PREFERRED_SIZE))))
 					.addContainerGap(19, Short.MAX_VALUE))
-				.addGroup(Alignment.TRAILING, groupLayoutJContentPane.createSequentialGroup()
+				.addGroup(groupLayoutJContentPane.createSequentialGroup()
 					.addContainerGap(805, Short.MAX_VALUE)
 					.addComponent(btnEditBook, GroupLayout.PREFERRED_SIZE, 159, GroupLayout.PREFERRED_SIZE)
 					.addContainerGap())
@@ -189,8 +215,10 @@ public class BookInventory extends JFrame {
 							.addGap(69)
 							.addComponent(jButtonAddBook, GroupLayout.PREFERRED_SIZE, 38, GroupLayout.PREFERRED_SIZE)
 							.addGap(18)
+							.addComponent(btnEditBook_1, GroupLayout.PREFERRED_SIZE, 38, GroupLayout.PREFERRED_SIZE)
+							.addGap(18)
 							.addComponent(btnDeleteBook, GroupLayout.PREFERRED_SIZE, 38, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED, 246, Short.MAX_VALUE)
+							.addPreferredGap(ComponentPlacement.RELATED, 190, Short.MAX_VALUE)
 							.addComponent(btnEditBook, GroupLayout.PREFERRED_SIZE, 38, GroupLayout.PREFERRED_SIZE)
 							.addGap(35))))
 		);
