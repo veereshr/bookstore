@@ -3,21 +3,15 @@ package com.ooad.bookstore;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.GridLayout;
-import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-
-import javax.imageio.ImageIO;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
@@ -27,13 +21,11 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.JTextField;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.Timer;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
-
 import com.ooad.bookstore.model.BookDetails;
 import com.ooad.bookstore.util.DBConnection;
 import com.ooad.bookstore.util.DBUtilitiesDAOImpl;
@@ -45,7 +37,6 @@ public class BookInventory extends JFrame {
 	private JPanel jContentPane;
 	JLabel jLabelDateTime;
 	JLabel jLabelDate;
-	private static final String CART_ICON = "src/main/resources/cart.jpg";
 	private JTable jTable;
 	JLabel jLabelGreetingName;
 
@@ -77,15 +68,9 @@ public class BookInventory extends JFrame {
 		jLabelDate.setForeground(Color.MAGENTA);
 		jLabelDate.setFont(new Font("Calibri", Font.BOLD, 18));
 		jLabelDate.setBackground(Color.WHITE);
-		Image img;
-		try {
-			File sourceImage = new File(CART_ICON);
-			img = ImageIO.read(sourceImage);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
+		
 		JButton jButtonAddBook = new JButton("Add book");
+		jButtonAddBook.setBackground(Color.CYAN);
 		jButtonAddBook.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				DataEntry dataEntry = new DataEntry(userName, "add");
@@ -108,6 +93,7 @@ public class BookInventory extends JFrame {
 		getContentPane().add(jScrollPane, BorderLayout.CENTER);
 
 		JButton btnEditBook = new JButton("Logout");
+		btnEditBook.setBackground(Color.CYAN);
 		btnEditBook.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				EmployeeLogin login = new EmployeeLogin();
@@ -118,6 +104,7 @@ public class BookInventory extends JFrame {
 		btnEditBook.setFont(new Font("Calibri", Font.BOLD, 18));
 
 		JButton btnDeleteBook = new JButton("Delete Book");
+		btnDeleteBook.setBackground(Color.CYAN);
 		btnDeleteBook.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String ISBN = (String) jTable.getValueAt(

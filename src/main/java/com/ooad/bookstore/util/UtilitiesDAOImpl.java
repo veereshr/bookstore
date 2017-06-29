@@ -1,17 +1,11 @@
 package com.ooad.bookstore.util;
 
-import java.awt.Component;
+
 import java.io.FileNotFoundException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
-import javax.swing.JButton;
-import javax.swing.JPanel;
-import javax.swing.JTable;
-import javax.swing.JTextField;
 import javax.swing.table.AbstractTableModel;
-import javax.swing.table.TableCellRenderer;
 
 @SuppressWarnings("serial")
 public class UtilitiesDAOImpl extends AbstractTableModel {
@@ -108,13 +102,13 @@ public class UtilitiesDAOImpl extends AbstractTableModel {
 
 	@Override
 	public boolean isCellEditable(int row, int column) {
-		return column == 5;
+		return column == 0;
 	}
 
 	@Override
 	public void setValueAt(Object value, int rowIndex, int colIndex) {
 
-		if (colIndex == 5) {
+		if (colIndex == 0) {
 			boolean select = (Boolean) value;
 			rows[rowIndex][colIndex] = select;
 		}

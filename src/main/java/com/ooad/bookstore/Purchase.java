@@ -52,8 +52,7 @@ public class Purchase extends JFrame {
 	private JTable jTable;
 	public static JLabel jLabelGreetingNameUser;
 	public static JLabel jLabelGreetingNameGuest;
-	private static final int CHECKBOX_WISHLIST_INDEX = 0;
-	private static final int CHECKBOX_SELECT_INDEX = 5;
+	private static final int CHECKBOX_SELECT_INDEX = 0;
 
 	public Purchase(String userName) {
 		initialize(userName);
@@ -113,7 +112,7 @@ public class Purchase extends JFrame {
 				String[] columns = { "Book", "Type", "Price" };
 				ArrayList<OrderDetails> arrayList = new ArrayList<OrderDetails>();
 				for (int i = 0; i < jTable.getRowCount(); i++) {
-					Boolean select = Boolean.valueOf(jTable.getValueAt(i, 5).toString());
+					Boolean select = Boolean.valueOf(jTable.getValueAt(i, 0).toString());
 					String bookName = jTable.getValueAt(i, 1).toString();
 					String bookType = jTable.getValueAt(i, 2).toString();
 					String bookPrice = jTable.getValueAt(i, 4).toString();
@@ -196,6 +195,43 @@ public class Purchase extends JFrame {
 		});
 		btnLogout.setBackground(Color.CYAN);
 		btnLogout.setFont(new Font("Calibri", Font.BOLD, 18));
+
+		JButton btnAddToWishlist = new JButton("Add to Wishlist");
+		btnAddToWishlist.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				WishList wishList = new WishList();
+				wishList.setVisible(true);
+				String[] columns = { "Book", "Type", "Price" };
+				ArrayList<OrderDetails> arrayList = new ArrayList<OrderDetails>();
+				for (int i = 0; i < jTable.getRowCount(); i++) {
+					Boolean select = Boolean.valueOf(jTable.getValueAt(i, 0).toString());
+					String bookName = jTable.getValueAt(i, 1).toString();
+					String bookType = jTable.getValueAt(i, 2).toString();
+					String bookPrice = jTable.getValueAt(i, 4).toString();
+					if (select) {
+						OrderDetails orderDetails = new OrderDetails();
+						orderDetails.setOrderName(bookName);
+						orderDetails.setOrderType(bookType);
+						orderDetails.setOrderPrice(bookPrice);
+						arrayList.add(orderDetails);
+					}
+
+				}
+
+				DefaultTableModel defaultTableModel = new DefaultTableModel();
+				wishList.jTable.setModel(defaultTableModel);
+				wishList.jTable.setRowHeight(50);
+				defaultTableModel.setColumnIdentifiers(columns);
+				for (OrderDetails orderDetails : arrayList) {
+					defaultTableModel.addRow(
+							new String[] { orderDetails.getOrderName(), String.valueOf(orderDetails.getOrderType()),
+									String.valueOf(orderDetails.getOrderPrice()) });
+				}
+			}
+		});
+		btnAddToWishlist.setFont(new Font("Calibri", Font.BOLD, 18));
+		btnAddToWishlist.setBackground(Color.CYAN);
+
 		GroupLayout groupLayoutJContentPane = new GroupLayout(jContentPane);
 		groupLayoutJContentPane.setHorizontalGroup(groupLayoutJContentPane.createParallelGroup(Alignment.LEADING)
 				.addGroup(groupLayoutJContentPane.createSequentialGroup().addGroup(groupLayoutJContentPane
@@ -226,9 +262,11 @@ public class Purchase extends JFrame {
 														GroupLayout.PREFERRED_SIZE))))
 						.addGroup(groupLayoutJContentPane.createSequentialGroup().addGap(796)
 								.addGroup(groupLayoutJContentPane.createParallelGroup(Alignment.LEADING)
-										.addComponent(btnLogout, GroupLayout.PREFERRED_SIZE, 159,
-												GroupLayout.PREFERRED_SIZE)
 										.addComponent(jButtonModifyAccount, GroupLayout.PREFERRED_SIZE, 159,
+												GroupLayout.PREFERRED_SIZE)
+										.addComponent(btnAddToWishlist, GroupLayout.PREFERRED_SIZE, 159,
+												GroupLayout.PREFERRED_SIZE)
+										.addComponent(btnLogout, GroupLayout.PREFERRED_SIZE, 159,
 												GroupLayout.PREFERRED_SIZE))))
 						.addContainerGap(16, Short.MAX_VALUE)));
 		groupLayoutJContentPane.setVerticalGroup(groupLayoutJContentPane.createParallelGroup(Alignment.LEADING)
@@ -246,6 +284,8 @@ public class Purchase extends JFrame {
 								.addComponent(lblDate, GroupLayout.PREFERRED_SIZE, 19, GroupLayout.PREFERRED_SIZE)
 								.addComponent(jLabelDate, GroupLayout.PREFERRED_SIZE, 19, GroupLayout.PREFERRED_SIZE))
 						.addGroup(groupLayoutJContentPane.createParallelGroup(Alignment.LEADING)
+								.addGroup(groupLayoutJContentPane.createSequentialGroup().addGap(25).addComponent(
+										jScrollPane, GroupLayout.PREFERRED_SIZE, 434, GroupLayout.PREFERRED_SIZE))
 								.addGroup(groupLayoutJContentPane.createSequentialGroup().addGap(137)
 										.addGroup(groupLayoutJContentPane.createParallelGroup(Alignment.LEADING)
 												.addComponent(jButtonAddToCart, GroupLayout.PREFERRED_SIZE, 62,
@@ -256,10 +296,12 @@ public class Purchase extends JFrame {
 										.addGap(23)
 										.addComponent(jButtonModifyAccount, GroupLayout.PREFERRED_SIZE, 38,
 												GroupLayout.PREFERRED_SIZE)
+										.addGap(30)
+										.addComponent(btnAddToWishlist, GroupLayout.PREFERRED_SIZE, 38,
+												GroupLayout.PREFERRED_SIZE)
 										.addGap(26).addComponent(btnLogout, GroupLayout.PREFERRED_SIZE, 38,
-												GroupLayout.PREFERRED_SIZE))
-								.addGroup(groupLayoutJContentPane.createSequentialGroup().addGap(25).addComponent(
-										jScrollPane, GroupLayout.PREFERRED_SIZE, 434, GroupLayout.PREFERRED_SIZE)))));
+												GroupLayout.PREFERRED_SIZE)))
+						.addContainerGap(23, Short.MAX_VALUE)));
 
 		jTable = new JTable();
 		jTable.setModel(new DefaultTableModel(
@@ -267,7 +309,7 @@ public class Purchase extends JFrame {
 						{ null, null, null, null, null, null, null }, { null, null, null, null, null, null, null },
 						{ null, null, null, null, null, null, null }, { null, null, null, null, null, null, null },
 						{ null, null, null, null, null, null, null }, { null, null, null, null, null, null, null }, },
-				new String[] { "Wishlist", "Book", "Type", "Availability", "Price", "Select", "Quantity" }));
+				new String[] { "Select", "Book", "Type", "Availability", "Price" }));
 		jScrollPane.setViewportView(jTable);
 		jContentPane.setLayout(groupLayoutJContentPane);
 
@@ -316,7 +358,7 @@ public class Purchase extends JFrame {
 				String[] columns = { "Book", "Type", "Price" };
 				ArrayList<OrderDetails> arrayList = new ArrayList<OrderDetails>();
 				for (int i = 0; i < jTable.getRowCount(); i++) {
-					Boolean select = Boolean.valueOf(jTable.getValueAt(i, 5).toString());
+					Boolean select = Boolean.valueOf(jTable.getValueAt(i, 0).toString());
 					String bookName = jTable.getValueAt(i, 1).toString();
 					String bookType = jTable.getValueAt(i, 2).toString();
 					String bookPrice = jTable.getValueAt(i, 4).toString();
@@ -383,6 +425,48 @@ public class Purchase extends JFrame {
 		});
 		jButtonLogout.setFont(new Font("Calibri", Font.BOLD, 18));
 		jButtonLogout.setBackground(Color.CYAN);
+
+		JButton jButtonAddToWishlist = new JButton("Add to Wishlist");
+		jButtonAddToWishlist.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				WishList wishList = new WishList();
+				wishList.setVisible(true);
+				String[] columns = { "Book", "Type", "Price" };
+				ArrayList<OrderDetails> arrayList = new ArrayList<OrderDetails>();
+				for (int i = 0; i < jTable.getRowCount(); i++) {
+					Boolean select = Boolean.valueOf(jTable.getValueAt(i, 0).toString());
+					String bookName = jTable.getValueAt(i, 1).toString();
+					String bookType = jTable.getValueAt(i, 2).toString();
+					String bookPrice = jTable.getValueAt(i, 4).toString();
+					if (select) {
+						OrderDetails orderDetails = new OrderDetails();
+						orderDetails.setOrderName(bookName);
+						orderDetails.setOrderType(bookType);
+						orderDetails.setOrderPrice(bookPrice);
+						arrayList.add(orderDetails);
+					}
+					
+				}
+
+				DefaultTableModel defaultTableModel = new DefaultTableModel();
+				wishList.jTable.setModel(defaultTableModel);
+				wishList.jTable.setRowHeight(50);
+				defaultTableModel.setColumnIdentifiers(columns);
+				TableColumn tableColumn;
+				tableColumn = jTable.getColumnModel().getColumn(CHECKBOX_SELECT_INDEX);
+				tableColumn.setCellEditor(jTable.getDefaultEditor(Boolean.class));
+				tableColumn.setCellRenderer(jTable.getDefaultRenderer(Boolean.class));
+				for (OrderDetails orderDetails : arrayList) {
+					defaultTableModel.addRow(
+							new String[] { orderDetails.getOrderName(), String.valueOf(orderDetails.getOrderType()),
+									String.valueOf(orderDetails.getOrderPrice()) });
+				}
+
+			}
+
+		});
+		jButtonAddToWishlist.setFont(new Font("Calibri", Font.BOLD, 18));
+		jButtonAddToWishlist.setBackground(Color.CYAN);
 		GroupLayout groupLayoutJContentPane = new GroupLayout(jContentPane);
 		groupLayoutJContentPane.setHorizontalGroup(groupLayoutJContentPane.createParallelGroup(Alignment.LEADING)
 				.addGroup(groupLayoutJContentPane.createSequentialGroup().addGroup(groupLayoutJContentPane
@@ -399,10 +483,20 @@ public class Purchase extends JFrame {
 												.addComponent(jScrollPane, GroupLayout.PREFERRED_SIZE, 738,
 														GroupLayout.PREFERRED_SIZE)
 												.addGap(26)
-												.addComponent(jButtonAddToCart, GroupLayout.PREFERRED_SIZE, 66,
-														GroupLayout.PREFERRED_SIZE)
-												.addGap(10).addComponent(jLabelAddToCart, GroupLayout.PREFERRED_SIZE,
-														91, GroupLayout.PREFERRED_SIZE))
+												.addGroup(groupLayoutJContentPane.createParallelGroup(Alignment.LEADING)
+														.addComponent(jButtonLogout, GroupLayout.PREFERRED_SIZE, 159,
+																GroupLayout.PREFERRED_SIZE)
+														.addComponent(jButtonAddToWishlist, GroupLayout.PREFERRED_SIZE,
+																159, GroupLayout.PREFERRED_SIZE)
+														.addGroup(groupLayoutJContentPane.createSequentialGroup()
+																.addComponent(jButtonAddToCart,
+																		GroupLayout.PREFERRED_SIZE, 66,
+																		GroupLayout.PREFERRED_SIZE)
+																.addGap(10).addComponent(jLabelAddToCart,
+																		GroupLayout.PREFERRED_SIZE, 91,
+																		GroupLayout.PREFERRED_SIZE))
+														.addComponent(jButtonModifyAccount, GroupLayout.PREFERRED_SIZE,
+																159, GroupLayout.PREFERRED_SIZE)))
 										.addGroup(groupLayoutJContentPane.createSequentialGroup()
 												.addComponent(jLabelWelcomeNote, GroupLayout.PREFERRED_SIZE, 205,
 														GroupLayout.PREFERRED_SIZE)
@@ -410,13 +504,7 @@ public class Purchase extends JFrame {
 												.addComponent(lblDate, GroupLayout.PREFERRED_SIZE, 46,
 														GroupLayout.PREFERRED_SIZE)
 												.addGap(2).addComponent(jLabelDate, GroupLayout.PREFERRED_SIZE, 151,
-														GroupLayout.PREFERRED_SIZE))))
-						.addGroup(groupLayoutJContentPane.createSequentialGroup().addGap(796)
-								.addGroup(groupLayoutJContentPane.createParallelGroup(Alignment.LEADING)
-										.addComponent(jButtonLogout, GroupLayout.PREFERRED_SIZE, 159,
-												GroupLayout.PREFERRED_SIZE)
-										.addComponent(jButtonModifyAccount, GroupLayout.PREFERRED_SIZE, 159,
-												GroupLayout.PREFERRED_SIZE))))
+														GroupLayout.PREFERRED_SIZE)))))
 						.addContainerGap(16, Short.MAX_VALUE)));
 		groupLayoutJContentPane.setVerticalGroup(groupLayoutJContentPane.createParallelGroup(Alignment.LEADING)
 				.addGroup(groupLayoutJContentPane.createSequentialGroup().addGap(4)
@@ -433,6 +521,8 @@ public class Purchase extends JFrame {
 								.addComponent(lblDate, GroupLayout.PREFERRED_SIZE, 19, GroupLayout.PREFERRED_SIZE)
 								.addComponent(jLabelDate, GroupLayout.PREFERRED_SIZE, 19, GroupLayout.PREFERRED_SIZE))
 						.addGroup(groupLayoutJContentPane.createParallelGroup(Alignment.LEADING)
+								.addGroup(groupLayoutJContentPane.createSequentialGroup().addGap(25).addComponent(
+										jScrollPane, GroupLayout.PREFERRED_SIZE, 434, GroupLayout.PREFERRED_SIZE))
 								.addGroup(groupLayoutJContentPane.createSequentialGroup().addGap(137)
 										.addGroup(groupLayoutJContentPane.createParallelGroup(Alignment.LEADING)
 												.addComponent(jButtonAddToCart, GroupLayout.PREFERRED_SIZE, 62,
@@ -440,13 +530,15 @@ public class Purchase extends JFrame {
 												.addGroup(groupLayoutJContentPane.createSequentialGroup().addGap(23)
 														.addComponent(jLabelAddToCart, GroupLayout.PREFERRED_SIZE, 19,
 																GroupLayout.PREFERRED_SIZE)))
-										.addGap(23)
+										.addGap(28)
 										.addComponent(jButtonModifyAccount, GroupLayout.PREFERRED_SIZE, 38,
 												GroupLayout.PREFERRED_SIZE)
-										.addGap(28).addComponent(jButtonLogout, GroupLayout.PREFERRED_SIZE, 38,
-												GroupLayout.PREFERRED_SIZE))
-								.addGroup(groupLayoutJContentPane.createSequentialGroup().addGap(25).addComponent(
-										jScrollPane, GroupLayout.PREFERRED_SIZE, 434, GroupLayout.PREFERRED_SIZE)))));
+										.addGap(18)
+										.addComponent(jButtonAddToWishlist, GroupLayout.PREFERRED_SIZE, 38,
+												GroupLayout.PREFERRED_SIZE)
+										.addGap(18).addComponent(jButtonLogout, GroupLayout.PREFERRED_SIZE, 38,
+												GroupLayout.PREFERRED_SIZE)))
+						.addContainerGap(23, Short.MAX_VALUE)));
 
 		jTable = new JTable();
 		jTable.setModel(new DefaultTableModel(
@@ -454,7 +546,7 @@ public class Purchase extends JFrame {
 						{ null, null, null, null, null, null, null }, { null, null, null, null, null, null, null },
 						{ null, null, null, null, null, null, null }, { null, null, null, null, null, null, null },
 						{ null, null, null, null, null, null, null }, { null, null, null, null, null, null, null }, },
-				new String[] { "WishList", "Book", "Type", "Availability", "Price", "Select", "Quantity" }));
+				new String[] { "Select", "Book", "Type", "Availability", "Price" }));
 		jScrollPane.setViewportView(jTable);
 		jContentPane.setLayout(groupLayoutJContentPane);
 
@@ -484,26 +576,21 @@ public class Purchase extends JFrame {
 	public void displayTable() {
 		ArrayList<BookDetails> arrayList = new ArrayList<BookDetails>();
 		arrayList = getDBUtilitiesDAOImplHelper().getBookDetails();
-		String[] columns = { "WishList", "Book", "Type", "Availability", "Price", "Select", "Quantity" };
-		Object[][] rows = new Object[arrayList.size()][7];
+		String[] columns = { "Select", "Book", "Type", "Availability", "Price" };
+		Object[][] rows = new Object[arrayList.size()][5];
 
 		for (int i = 0; i < arrayList.size(); i++) {
-			rows[i][0] = arrayList.get(i).isWishList();
+			rows[i][0] = arrayList.get(i).isSelect();
 			rows[i][1] = arrayList.get(i).getBook();
 			rows[i][2] = arrayList.get(i).getType();
 			rows[i][3] = arrayList.get(i).getAvailability();
 			rows[i][4] = arrayList.get(i).getPrice();
-			rows[i][5] = arrayList.get(i).isSelect();
-
 		}
 		UtilitiesDAOImpl utilitiesDAOImpl = new UtilitiesDAOImpl(rows, columns);
 		jTable.setModel(utilitiesDAOImpl);
 		jTable.setRowHeight(50);
 		jTable.getColumnModel().getColumn(2).setPreferredWidth(150);
 		TableColumn tableColumn;
-		tableColumn = jTable.getColumnModel().getColumn(CHECKBOX_WISHLIST_INDEX);
-		tableColumn.setCellEditor(jTable.getDefaultEditor(Boolean.class));
-		tableColumn.setCellRenderer(jTable.getDefaultRenderer(Boolean.class));
 		tableColumn = jTable.getColumnModel().getColumn(CHECKBOX_SELECT_INDEX);
 		tableColumn.setCellEditor(jTable.getDefaultEditor(Boolean.class));
 		tableColumn.setCellRenderer(jTable.getDefaultRenderer(Boolean.class));
@@ -512,5 +599,4 @@ public class Purchase extends JFrame {
 	private DBUtilitiesDAOImpl getDBUtilitiesDAOImplHelper() {
 		return DBUtilitiesDAOImpl.getInstance();
 	}
-
 }

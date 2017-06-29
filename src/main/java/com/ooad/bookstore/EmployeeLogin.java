@@ -8,8 +8,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.FileNotFoundException;
 import java.sql.SQLException;
-import java.text.ParseException;
-
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -21,13 +19,13 @@ import javax.swing.JTextField;
 import com.ooad.bookstore.util.UtilitiesDAOImpl;
 
 
+@SuppressWarnings("serial")
 public class EmployeeLogin extends JFrame {
 
 	private JPanel contentPane;
 	private JTextField jTextField;
 	private JPasswordField jPasswordField;
 	private JButton jButtonLogin;
-	private JButton jButtonNewUser;
 	private JLabel jLabelHeading;
 
 	/**

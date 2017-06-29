@@ -5,7 +5,6 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
-import com.ooad.bookstore.util.UtilitiesDAOImpl;
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.GroupLayout.Alignment;
@@ -14,8 +13,6 @@ import javax.swing.JLabel;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.FileNotFoundException;
-import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -79,12 +76,6 @@ public class ReviewOrder extends JFrame {
 		btnProceedToCheckout.setBackground(Color.CYAN);
 		btnProceedToCheckout.setFont(new Font("Calibri", Font.BOLD, 18));
 
-		JLabel jLabelTotal = new JLabel("Total - ");
-		jLabelTotal.setFont(new Font("Calibri", Font.BOLD, 20));
-
-		JLabel jLabelTotalPrice = new JLabel("");
-		jLabelTotalPrice.setFont(new Font("Calibri", Font.BOLD, 20));
-
 		JButton btnContinueShopping = new JButton("Continue Shopping");
 		btnContinueShopping.setBackground(Color.CYAN);
 		btnContinueShopping.addActionListener(new ActionListener() {
@@ -109,74 +100,65 @@ public class ReviewOrder extends JFrame {
 		btnLogout.setFont(new Font("Calibri", Font.BOLD, 18));
 		btnLogout.setBackground(Color.CYAN);
 		GroupLayout groupLayoutJContentPane = new GroupLayout(jContentPane);
-		groupLayoutJContentPane.setHorizontalGroup(groupLayoutJContentPane.createParallelGroup(Alignment.LEADING)
-				.addGroup(groupLayoutJContentPane.createSequentialGroup().addGroup(groupLayoutJContentPane
-						.createParallelGroup(Alignment.LEADING)
-						.addGroup(groupLayoutJContentPane.createSequentialGroup().addGap(317)
-								.addComponent(jLabel, GroupLayout.PREFERRED_SIZE, 225, GroupLayout.PREFERRED_SIZE)
-								.addGap(206)
-								.addComponent(jLabelTime, GroupLayout.PREFERRED_SIZE, 46, GroupLayout.PREFERRED_SIZE)
-								.addGap(2).addComponent(jLabelDateTime, GroupLayout.PREFERRED_SIZE, 117,
-										GroupLayout.PREFERRED_SIZE))
-						.addGroup(groupLayoutJContentPane.createSequentialGroup().addGap(27).addGroup(
-								groupLayoutJContentPane.createParallelGroup(Alignment.LEADING, false).addGroup(
-										groupLayoutJContentPane.createSequentialGroup().addGroup(groupLayoutJContentPane
-												.createParallelGroup(Alignment.TRAILING)
-												.addGroup(groupLayoutJContentPane.createSequentialGroup()
-														.addComponent(jLabelTotal)
-														.addPreferredGap(ComponentPlacement.RELATED)
-														.addComponent(jLabelTotalPrice, GroupLayout.PREFERRED_SIZE, 51,
-																GroupLayout.PREFERRED_SIZE)
-														.addGap(227))
-												.addComponent(jScrollPane, Alignment.LEADING,
-														GroupLayout.PREFERRED_SIZE, 718, GroupLayout.PREFERRED_SIZE))
-												.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE,
-														Short.MAX_VALUE)
-												.addComponent(btnLogout, GroupLayout.PREFERRED_SIZE, 160,
-														GroupLayout.PREFERRED_SIZE))
-										.addGroup(groupLayoutJContentPane.createParallelGroup(Alignment.TRAILING)
-												.addComponent(btnProceedToCheckout, GroupLayout.PREFERRED_SIZE, 160,
-														GroupLayout.PREFERRED_SIZE)
-												.addGroup(groupLayoutJContentPane.createSequentialGroup()
-														.addComponent(jLabelWelcomeNote, GroupLayout.PREFERRED_SIZE,
-																205, GroupLayout.PREFERRED_SIZE)
-														.addGap(516)
-														.addComponent(lblDate, GroupLayout.PREFERRED_SIZE, 46,
-																GroupLayout.PREFERRED_SIZE)
-														.addGap(2).addComponent(jLabelDate, GroupLayout.PREFERRED_SIZE,
-																151, GroupLayout.PREFERRED_SIZE))
-												.addComponent(btnContinueShopping)))))
-						.addContainerGap(26, Short.MAX_VALUE)));
-		groupLayoutJContentPane.setVerticalGroup(groupLayoutJContentPane.createParallelGroup(Alignment.LEADING)
-				.addGroup(groupLayoutJContentPane.createSequentialGroup().addGap(4)
-						.addGroup(groupLayoutJContentPane.createParallelGroup(Alignment.LEADING)
-								.addComponent(jLabel, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE)
-								.addGroup(groupLayoutJContentPane.createSequentialGroup().addGap(15).addComponent(
-										jLabelTime, GroupLayout.PREFERRED_SIZE, 19, GroupLayout.PREFERRED_SIZE))
-								.addGroup(groupLayoutJContentPane.createSequentialGroup().addGap(15).addComponent(
-										jLabelDateTime, GroupLayout.PREFERRED_SIZE, 19, GroupLayout.PREFERRED_SIZE)))
-						.addGap(12)
-						.addGroup(groupLayoutJContentPane.createParallelGroup(Alignment.LEADING)
-								.addComponent(jLabelWelcomeNote, GroupLayout.PREFERRED_SIZE, 19,
-										GroupLayout.PREFERRED_SIZE)
-								.addComponent(lblDate, GroupLayout.PREFERRED_SIZE, 19, GroupLayout.PREFERRED_SIZE)
-								.addComponent(jLabelDate, GroupLayout.PREFERRED_SIZE, 19, GroupLayout.PREFERRED_SIZE))
-						.addGroup(groupLayoutJContentPane.createParallelGroup(Alignment.LEADING)
-								.addGroup(groupLayoutJContentPane.createSequentialGroup().addGap(157)
-										.addComponent(btnProceedToCheckout, GroupLayout.PREFERRED_SIZE, 38,
-												GroupLayout.PREFERRED_SIZE)
-										.addGap(27)
-										.addComponent(btnContinueShopping, GroupLayout.PREFERRED_SIZE, 38,
-												GroupLayout.PREFERRED_SIZE)
-										.addGap(23).addComponent(btnLogout, GroupLayout.PREFERRED_SIZE, 38,
-												GroupLayout.PREFERRED_SIZE))
-								.addGroup(groupLayoutJContentPane.createSequentialGroup().addGap(25).addComponent(
-										jScrollPane, GroupLayout.PREFERRED_SIZE, 374, GroupLayout.PREFERRED_SIZE)))
-						.addPreferredGap(ComponentPlacement.UNRELATED)
-						.addGroup(groupLayoutJContentPane.createParallelGroup(Alignment.TRAILING)
-								.addComponent(jLabelTotal).addComponent(jLabelTotalPrice, GroupLayout.PREFERRED_SIZE,
-										26, GroupLayout.PREFERRED_SIZE))
-						.addGap(39)));
+		groupLayoutJContentPane.setHorizontalGroup(
+			groupLayoutJContentPane.createParallelGroup(Alignment.LEADING)
+				.addGroup(groupLayoutJContentPane.createSequentialGroup()
+					.addGroup(groupLayoutJContentPane.createParallelGroup(Alignment.LEADING)
+						.addGroup(groupLayoutJContentPane.createSequentialGroup()
+							.addGap(317)
+							.addComponent(jLabel, GroupLayout.PREFERRED_SIZE, 225, GroupLayout.PREFERRED_SIZE)
+							.addGap(206)
+							.addComponent(jLabelTime, GroupLayout.PREFERRED_SIZE, 46, GroupLayout.PREFERRED_SIZE)
+							.addGap(2)
+							.addComponent(jLabelDateTime, GroupLayout.PREFERRED_SIZE, 117, GroupLayout.PREFERRED_SIZE))
+						.addGroup(groupLayoutJContentPane.createSequentialGroup()
+							.addGap(27)
+							.addGroup(groupLayoutJContentPane.createParallelGroup(Alignment.LEADING, false)
+								.addGroup(groupLayoutJContentPane.createSequentialGroup()
+									.addComponent(jScrollPane, GroupLayout.PREFERRED_SIZE, 718, GroupLayout.PREFERRED_SIZE)
+									.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+									.addComponent(btnLogout, GroupLayout.PREFERRED_SIZE, 160, GroupLayout.PREFERRED_SIZE))
+								.addGroup(groupLayoutJContentPane.createParallelGroup(Alignment.TRAILING)
+									.addComponent(btnProceedToCheckout, GroupLayout.PREFERRED_SIZE, 160, GroupLayout.PREFERRED_SIZE)
+									.addGroup(groupLayoutJContentPane.createSequentialGroup()
+										.addComponent(jLabelWelcomeNote, GroupLayout.PREFERRED_SIZE, 205, GroupLayout.PREFERRED_SIZE)
+										.addGap(516)
+										.addComponent(lblDate, GroupLayout.PREFERRED_SIZE, 46, GroupLayout.PREFERRED_SIZE)
+										.addGap(2)
+										.addComponent(jLabelDate, GroupLayout.PREFERRED_SIZE, 151, GroupLayout.PREFERRED_SIZE))
+									.addComponent(btnContinueShopping)))))
+					.addContainerGap(27, Short.MAX_VALUE))
+		);
+		groupLayoutJContentPane.setVerticalGroup(
+			groupLayoutJContentPane.createParallelGroup(Alignment.LEADING)
+				.addGroup(groupLayoutJContentPane.createSequentialGroup()
+					.addGap(4)
+					.addGroup(groupLayoutJContentPane.createParallelGroup(Alignment.LEADING)
+						.addComponent(jLabel, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE)
+						.addGroup(groupLayoutJContentPane.createSequentialGroup()
+							.addGap(15)
+							.addComponent(jLabelTime, GroupLayout.PREFERRED_SIZE, 19, GroupLayout.PREFERRED_SIZE))
+						.addGroup(groupLayoutJContentPane.createSequentialGroup()
+							.addGap(15)
+							.addComponent(jLabelDateTime, GroupLayout.PREFERRED_SIZE, 19, GroupLayout.PREFERRED_SIZE)))
+					.addGap(12)
+					.addGroup(groupLayoutJContentPane.createParallelGroup(Alignment.LEADING)
+						.addComponent(jLabelWelcomeNote, GroupLayout.PREFERRED_SIZE, 19, GroupLayout.PREFERRED_SIZE)
+						.addComponent(lblDate, GroupLayout.PREFERRED_SIZE, 19, GroupLayout.PREFERRED_SIZE)
+						.addComponent(jLabelDate, GroupLayout.PREFERRED_SIZE, 19, GroupLayout.PREFERRED_SIZE))
+					.addGroup(groupLayoutJContentPane.createParallelGroup(Alignment.LEADING)
+						.addGroup(groupLayoutJContentPane.createSequentialGroup()
+							.addGap(157)
+							.addComponent(btnProceedToCheckout, GroupLayout.PREFERRED_SIZE, 38, GroupLayout.PREFERRED_SIZE)
+							.addGap(27)
+							.addComponent(btnContinueShopping, GroupLayout.PREFERRED_SIZE, 38, GroupLayout.PREFERRED_SIZE)
+							.addGap(23)
+							.addComponent(btnLogout, GroupLayout.PREFERRED_SIZE, 38, GroupLayout.PREFERRED_SIZE))
+						.addGroup(groupLayoutJContentPane.createSequentialGroup()
+							.addGap(25)
+							.addComponent(jScrollPane, GroupLayout.PREFERRED_SIZE, 374, GroupLayout.PREFERRED_SIZE)))
+					.addGap(76))
+		);
 
 		jTable = new JTable();
 		jTable.setModel(
@@ -203,9 +185,5 @@ public class ReviewOrder extends JFrame {
 
 		};
 		new Timer(1000, actionListener).start();
-	}
-
-	private UtilitiesDAOImpl getUtilitiesDAOImplHelper() throws FileNotFoundException, SQLException {
-		return UtilitiesDAOImpl.getInstance();
 	}
 }

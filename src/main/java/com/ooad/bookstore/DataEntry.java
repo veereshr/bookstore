@@ -1,8 +1,6 @@
 package com.ooad.bookstore;
 
-import java.awt.BorderLayout;
 import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -11,10 +9,8 @@ import javax.swing.JLabel;
 import java.awt.Font;
 import javax.swing.JTextField;
 import javax.swing.JButton;
-
 import com.ooad.bookstore.util.DBConnection;
 import com.ooad.bookstore.util.DBUtilitiesDAOImpl;
-
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.io.FileNotFoundException;
@@ -22,12 +18,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.awt.Color;
 
-/***
- * 
- * @author VikneshKumar
- * 
- */
-
+@SuppressWarnings("serial")
 public class DataEntry extends JFrame {
 
 	private JPanel contentPane;
