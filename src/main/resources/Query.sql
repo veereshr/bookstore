@@ -18,11 +18,11 @@ customerExpiry varchar(15) not null,
 unique (customerID),
 primary key (customerID));
 
-create table if not exists bookDetails (bookID int(10) not null auto_increment,
+create table if not exists bookDetails (bookID varchar(20) not null,
 bookName varchar(20) not null,
-bookType varchar(10) not null,
-bookAvailability int(10) not null,
-bookPrice varchar(10) not null,
+bookType varchar(20) not null,
+bookAvailability int(20) not null,
+bookPrice varchar(20) not null,
 unique (bookID),
 primary key (bookID));
 

@@ -95,6 +95,34 @@ public class DBUtilitiesDAOImpl {
 		return null;
 	}
 
+	
+	public BookDetails getBookDetails(String ISBN){
+		String getBookDetails = "SELECT bookID,bookName, bookType, bookAvailability, bookPrice FROM bookDetails where bookID=?";
+		PreparedStatement prepareStatement;
+		try {
+			prepareStatement = DBConnection.getConnection(DATABASE_NAME).prepareStatement(getBookDetails);
+			prepareStatement.setString(1, ISBN);
+			ResultSet resultSet = prepareStatement.executeQuery();
+			BookDetails bookDetails = null;
+			if (resultSet.next()) {
+				bookDetails = new BookDetails();
+				bookDetails.setISBN(resultSet.getString("bookID"));
+				bookDetails.setBook(resultSet.getString("bookName"));
+				bookDetails.setType(resultSet.getString("bookType"));
+				bookDetails.setAvailability(resultSet.getString("bookAvailability"));
+				bookDetails.setPrice(resultSet.getString("bookPrice"));
+			}
+			return bookDetails;
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	
+	}
 	private Customer getCustomerHelper() {
 		return Customer.getInstance();
 	}
